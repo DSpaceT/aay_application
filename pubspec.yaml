@@ -24,4 +24,8 @@ flutter:
     - assets/Tasks_icon.png
     - assets/TasksPage.png
     - assets/PlacesPage.png
+    - assets/account_circle_icon.png
+    - assets/info_icon.png
+    - assets/settings_icon.png
+    - assets/MusicPage.png
   uses-material-design: true

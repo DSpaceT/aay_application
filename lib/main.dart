@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'studypage.dart';
 import 'coffeeplaces.dart';
 import 'taskspage.dart';
+import 'musicpage.dart';
+import 'settingspage.dart';
+import 'profilepage.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,9 +23,12 @@ class MyApp extends StatelessWidget {
       // Define the routes
       routes: {
         '/': (context) => const MyHomePage(),
-        '/next': (context) => const PlacesPage(),
+        '/studypage': (context) => const PlacesPage(),
         '/coffeeplaces' : (context) => const StudyPage(),
         '/taskspage' : (context) => const TasksPage(),
+        '/musicpage' : (context) => const MusicPage(),
+        '/settingspage': (context) => const SettingsPage(),
+        '/profilepage' : (context) => const ProfilePage(),
       },
     );
   }
@@ -42,7 +48,7 @@ class MyHomePage extends StatelessWidget {
         if (details.primaryDelta! < 0 && details.globalPosition.dx > screenWidth / 2) {
           _navigateToCoffeePage(context);
         }else if(details.primaryDelta! >0 && details.globalPosition.dx < screenWidth / 2){
-          _navigateToNextPage(context);
+          _navigateToStudyPage(context);
         }
         
       },
@@ -82,8 +88,8 @@ class MyHomePage extends StatelessWidget {
       ),
     );
   }
-  void _navigateToNextPage(BuildContext context) {
-    Navigator.pushNamed(context, '/next');
+  void _navigateToStudyPage(BuildContext context) {
+    Navigator.pushNamed(context, '/studypage');
   }
   void _navigateToCoffeePage(BuildContext context){
     Navigator.pushNamed(context,'/coffeeplaces');
