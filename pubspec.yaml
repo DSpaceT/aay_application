@@ -28,4 +28,9 @@ flutter:
     - assets/info_icon.png
     - assets/settings_icon.png
     - assets/MusicPage.png
+    - assets/SettingsPage.png
+    - assets/overlays/Settings_info_overlay.png
+    - assets/overlays/Study_info_overlay.png
+    - assets/overlays/Places_info_overlay.png
+    - assets/overlays/Music_info_overlay.png
   uses-material-design: true
