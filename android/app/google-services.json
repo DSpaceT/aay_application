@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "311855956920",
+    "project_id": "studybuddy-9e9bd",
+    "storage_bucket": "studybuddy-9e9bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311855956920:android:6574ff1446f339b0a7854d",
+        "android_client_info": {
+          "package_name": "com.example.aay_application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7ILButnwVa8yVPwkO1g3fU6wam2mntq8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
