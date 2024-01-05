@@ -19,6 +19,8 @@ class _TasksPageState extends State<TasksPage> {
   bool isOverlayVisible = false;
   final _controller = TextEditingController();
   final _controller2 = TextEditingController();
+  static int number = 0;
+  bool isDataFetched = false;
 
   late List<Task> tasks;
 
@@ -37,6 +39,7 @@ class _TasksPageState extends State<TasksPage> {
   @override
   void initState() {
     super.initState();
+    _initializeData();
   }
 
   @override
@@ -53,10 +56,10 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
-  Future<void> _initializeData() async {
-    userId = await DeviceUtils.getDeviceId();
-    tasks = await _getAllTasksFromFirestore();
-  }
+  // Future<void> _initializeData() async {
+  //   userId = await DeviceUtils.getDeviceId();
+  //   tasks = await _getAllTasksFromFirestore();
+  // }
 
   Widget _buildContent() {
     return Scaffold(
@@ -82,6 +85,7 @@ class _TasksPageState extends State<TasksPage> {
               right: 20,
               bottom: 200,
               child: TasksList(
+                userId: userId,
                 tasks: tasks,
                 infoCallback: () => showOverlay_here(),
               ),
@@ -104,7 +108,11 @@ class _TasksPageState extends State<TasksPage> {
               child: DialogBox(
                 controller: _controller,
                 controller2: _controller2,
-                onSave: () => _addTask(_controller.text, _controller2.text),
+                onSave: () =>{
+                  //hideOverlay_here(),
+                  isOverlayVisible = false,
+                  _addTask(_controller.text, _controller2.text),
+                },
                 onCancel: hideOverlay_here,
                 onClose: hideOverlay_here,
               ),
@@ -114,31 +122,78 @@ class _TasksPageState extends State<TasksPage> {
       ),
     );
   }
+  Future<void> _initializeData() async {
+    userId = await DeviceUtils.getDeviceId();
+
+    // Fetch data only if it hasn't been fetched already
+    if (!isDataFetched) {
+      tasks = await _getAllTasksFromFirestore();
+      isDataFetched = true;
+    }
+  }
 
   void _navigateToBackPage(BuildContext context) {
     Navigator.of(context).pop();
   }
 
-  void _addTask(String newtitle, String newdescription) async {
+  void _addTask(String newtitle, String newdescription) async{
     await _addTaskToFirestore(newtitle, newdescription);
-    tasks = await _getAllTasksFromFirestore(); // Reload tasks after adding a new task
-    setState(() {});
+    //tasks = await _getAllTasksFromFirestore();
+     // Reload tasks after adding a new task
+    //setState(() {});
   }
 
+  // Future<void> _addTaskToFirestore(String newtitle, String newdescription) async {
+  //   if (userId.isNotEmpty) {
+  //     await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(userId)
+  //         .collection('tasks')
+  //         .add({
+  //           'title': newtitle,
+  //           'description': newdescription,
+  //           'id': number.toString(),
+  //           'isCompleted': false,
+  //         });
+  //   }
+
+  //   number++;
+  // }
   Future<void> _addTaskToFirestore(String newtitle, String newdescription) async {
-    if (userId.isNotEmpty) {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .collection('tasks')
-          .add({
-            'title': newtitle,
-            'description': newdescription,
-          });
-    }
+  if (userId.isNotEmpty) {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('tasks')
+        .add({
+          'title': newtitle,
+          'description': newdescription,
+          'id': number.toString(),
+          'isCompleted': false,
+        })
+        .then((documentReference) {
+          // Successfully added to Firestore, update the local list
+          Task newTask = Task(
+            id: number.toString(),
+            title: newtitle,
+            description: newdescription,
+            isCompleted: false,
+          );
+          tasks.add(newTask);
+          setState(() {}); // Trigger a rebuild to update the UI
+        })
+        .catchError((error) {
+          // Handle any errors here
+          print('Error adding task to Firestore: $error');
+        });
   }
+
+  number++;
+}
+
 
   Future<List<Task>> _getAllTasksFromFirestore() async {
+    print("getting data");
     List<Task> fetchedTasks = [];
 
     if (userId.isNotEmpty) {
@@ -151,8 +206,10 @@ class _TasksPageState extends State<TasksPage> {
       fetchedTasks = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data();
         return Task(
+          id: data['id'],
           title: data['title'] ?? '',
           description: data['description'] ?? '',
+          isCompleted: data['isCompleted'],
         );
       }).toList();
     }
