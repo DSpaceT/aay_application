@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'utils/device_id.dart';
+import 'package:provider/provider.dart';
 
 
 import 'studypage.dart';
@@ -11,6 +12,8 @@ import 'musicpage.dart';
 import 'settingspage.dart';
 import 'profilepage.dart';
 import 'homepage.dart';
+
+import 'utils/time_provider.dart';
 
 
 void main() async{
@@ -29,28 +32,52 @@ void main() async{
 
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ChangeNotifierProvider(
+      create: (context) => TimerProvider(10),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        // Define the routes
+        routes: {
+          '/': (context) => const MyHomePage(),
+          '/studypage': (context) => const PlacesPage(),
+          '/coffeeplaces': (context) => const StudyPage(),
+          '/taskspage': (context) => const TasksPage(),
+          '/musicpage': (context) => const MusicPage(),
+          '/settingspage': (context) => const SettingsPage(),
+          '/profilepage': (context) => const ProfilePage(),
+        },
       ),
-      // Define the routes
-      routes: {
-        '/': (context) => const MyHomePage(),
-        '/studypage': (context) => const PlacesPage(),
-        '/coffeeplaces' : (context) => const StudyPage(),
-        '/taskspage' : (context) => const TasksPage(),
-        '/musicpage' : (context) => const MusicPage(),
-        '/settingspage': (context) => const SettingsPage(),
-        '/profilepage' : (context) => const ProfilePage(),
-      },
     );
   }
 }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Flutter Demo',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       // Define the routes
+//       routes: {
+//         '/': (context) => const MyHomePage(),
+//         '/studypage': (context) => const PlacesPage(),
+//         '/coffeeplaces' : (context) => const StudyPage(),
+//         '/taskspage' : (context) => const TasksPage(),
+//         '/musicpage' : (context) => const MusicPage(),
+//         '/settingspage': (context) => const SettingsPage(),
+//         '/profilepage' : (context) => const ProfilePage(),
+//       },
+//     );
+//   }
+// }
 
