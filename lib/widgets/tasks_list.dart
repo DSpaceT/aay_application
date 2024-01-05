@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 
+
 class Task {
   String title;
   String description;
@@ -11,8 +12,12 @@ class Task {
 
 class TasksList extends StatefulWidget {
   final List<Task> tasks;
+  final Function()? infoCallback;
 
-  TasksList({required this.tasks});
+  TasksList({
+    required this.tasks,
+    this.infoCallback,
+  });
 
   @override
   _TasksListState createState() => _TasksListState();
@@ -26,39 +31,34 @@ class _TasksListState extends State<TasksList> {
       itemBuilder: (context, index) {
         if (index < widget.tasks.length) {
           return ListTile(
-            title: TextField(
-              controller: TextEditingController(text: widget.tasks[index].title),
-              onChanged: (text) {
-                widget.tasks[index].title = text;
-              },
-              decoration: InputDecoration(
-                labelText: 'Task Title',
+            title: Text(
+              widget.tasks[index].title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            subtitle: TextField(
-              controller: TextEditingController(text: widget.tasks[index].description),
-              onChanged: (text) {
-                widget.tasks[index].description = text;
-              },
-              decoration: InputDecoration(
-                labelText: 'Task Description',
-              ),
+            subtitle: Text(
+              widget.tasks[index].description,
+              style: const TextStyle(fontSize: 16),
             ),
           );
-        } else {
-          // "Add Task" button
-          return ElevatedButton(
-            onPressed: () {
-              setState(() {
-                // Add a new task to the list
-                widget.tasks.add(Task(title: 'New Task', description: ''));
-              });
-            },
-            child: Text('Add Task'),
-          );
-        }
+        } 
+        // else {
+        //   // "Add Task" button
+        //   return ElevatedButton(
+        //     onPressed: () {
+        //       // Open overlay when the "Add Task" button is pressed
+        //       if (widget.infoCallback != null) {
+        //         widget.infoCallback!();
+        //       }
+        //     },
+        //     child: const Text('Add Task'),
+        //   );
+        // }
       },
     );
   }
 }
+
 

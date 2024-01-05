@@ -38,4 +38,5 @@ flutter:
     - assets/overlays/Study_info_overlay.png
     - assets/overlays/Places_info_overlay.png
     - assets/overlays/Music_info_overlay.png
+    - assets/overlays/Empty_overlay.png
   uses-material-design: true

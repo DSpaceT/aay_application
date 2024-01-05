@@ -13,20 +13,31 @@ class DeviceUtils{
 
     return deviceId;
   }
-  static Future<bool> doesDeviceIdExist(String deviceId) async {
+// device_id_utils.dart
+  // ... (other code)
+
+  static Future<bool> doesDeviceExist(String userId) async {
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
-        .collection('users') // Replace with your Firestore collection name
-        .where('id', isEqualTo: deviceId) // Replace with your field name
+        .collection('users')
+        .where('id', isEqualTo: userId)
         .get();
 
     return querySnapshot.docs.isNotEmpty;
   }
 
-  static Future<void> addDeviceIdToFirestore(String deviceId) async {
-    await FirebaseFirestore.instance
-        .collection('users') // Replace with your Firestore collection name
-        .add({
-      'id': deviceId, // Replace with your field name
-    });
+  static Future<void> addDeviceIfNotExists(String userId) async {
+    bool doesExist = await doesDeviceExist(userId);
+
+    if (!doesExist) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .set({
+        'id': userId,
+        // Add other user information as needed
+      });
+    }
   }
 }
+
+

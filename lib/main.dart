@@ -20,9 +20,9 @@ void main() async{
   );
   String deviceId = await DeviceUtils.getDeviceId();
 
-  bool doesExist = await DeviceUtils.doesDeviceIdExist(deviceId);
+  bool doesExist = await DeviceUtils.doesDeviceExist(deviceId);
   if (!doesExist) {
-    await DeviceUtils.addDeviceIdToFirestore(deviceId);
+    await DeviceUtils.addDeviceIfNotExists(deviceId);
     print('Device ID added to Firestore: $deviceId');
   }
   print('Device ID: $deviceId');

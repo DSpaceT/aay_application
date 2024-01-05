@@ -1,20 +1,64 @@
 // tasks_page.dart
 
 import 'package:flutter/material.dart';
-import 'widgets/tasks_list.dart'; // Import the tasks.dart file
+import 'widgets/tasks_list.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'utils/device_id.dart';
+import 'widgets/overlay_function.dart';
 
-class TasksPage extends StatelessWidget {
+
+class TasksPage extends StatefulWidget {
   const TasksPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // Dummy tasks for demonstration purposes
-    List<Task> tasks = [
-      Task(title: 'Task 1', description: 'Description for Task 1'),
-      Task(title: 'Task 2', description: 'Description for Task 2'),
-      // Add more tasks as needed
-    ];
+  _TasksPageState createState() => _TasksPageState();
+}
 
+class _TasksPageState extends State<TasksPage> {
+  late String userId; // User ID
+  bool isOverlayVisible = false;
+  final _controller = TextEditingController();
+  final _controller2 = TextEditingController();
+
+  late List<Task> tasks;
+
+  void showOverlay_here() {
+    setState(() {
+      isOverlayVisible = true;
+    });
+  }
+
+  void hideOverlay_here() {
+    setState(() {
+      isOverlayVisible = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<void>(
+      future: _initializeData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return _buildContent();
+        } else {
+          return CircularProgressIndicator(); // Loading indicator
+        }
+      },
+    );
+  }
+
+  Future<void> _initializeData() async {
+    userId = await DeviceUtils.getDeviceId();
+    tasks = await _getAllTasksFromFirestore();
+  }
+
+  Widget _buildContent() {
     return Scaffold(
       body: GestureDetector(
         onVerticalDragUpdate: (DragUpdateDetails details) {
@@ -32,15 +76,39 @@ class TasksPage extends StatelessWidget {
                 ),
               ),
             ),
-            // Tasks List
             Positioned(
-              top: 100, // Adjust the position as needed
-              left: 20, // Adjust the position as needed
-              right: 20, // Adjust the position as needed
-              bottom: 20, // Adjust the position as needed
-              child: TasksList(tasks: tasks),
+              top: 100,
+              left: 20,
+              right: 20,
+              bottom: 200,
+              child: TasksList(
+                tasks: tasks,
+                infoCallback: () => showOverlay_here(),
+              ),
             ),
-            // Add other widgets as needed...
+            Positioned(
+              top: 580,
+              left: 20,
+              right: 20,
+              bottom: 170,
+              child: ElevatedButton(
+                  onPressed: () {
+                    // Open overlay when the "Add Task" button is pressed
+                   showOverlay_here();
+                  },
+                  child: const Text('Add Task'),
+                )
+            ),
+            Visibility(
+              visible: isOverlayVisible,
+              child: DialogBox(
+                controller: _controller,
+                controller2: _controller2,
+                onSave: () => _addTask(_controller.text, _controller2.text),
+                onCancel: hideOverlay_here,
+                onClose: hideOverlay_here,
+              ),
+            ),
           ],
         ),
       ),
@@ -49,5 +117,46 @@ class TasksPage extends StatelessWidget {
 
   void _navigateToBackPage(BuildContext context) {
     Navigator.of(context).pop();
+  }
+
+  void _addTask(String newtitle, String newdescription) async {
+    await _addTaskToFirestore(newtitle, newdescription);
+    tasks = await _getAllTasksFromFirestore(); // Reload tasks after adding a new task
+    setState(() {});
+  }
+
+  Future<void> _addTaskToFirestore(String newtitle, String newdescription) async {
+    if (userId.isNotEmpty) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('tasks')
+          .add({
+            'title': newtitle,
+            'description': newdescription,
+          });
+    }
+  }
+
+  Future<List<Task>> _getAllTasksFromFirestore() async {
+    List<Task> fetchedTasks = [];
+
+    if (userId.isNotEmpty) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('tasks')
+          .get();
+
+      fetchedTasks = querySnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data();
+        return Task(
+          title: data['title'] ?? '',
+          description: data['description'] ?? '',
+        );
+      }).toList();
+    }
+
+    return fetchedTasks;
   }
 }
