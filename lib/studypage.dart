@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'widgets/overlay_function.dart';
 import 'widgets/custom_appbar.dart';
+import 'widgets/schedule_adder.dart';
 
 import 'package:provider/provider.dart';
 
-import 'dart:async';
-
 import 'utils/time_provider.dart';
+import 'utils/timer_provider_break.dart';
 
 
-// Assuming the TimerProvider is in 'utils/time_provider.dart'
-import 'utils/time_provider.dart';
+bool globalstudy = true;
+bool globalresume = false;
+
 class StudyPage extends StatefulWidget {
   const StudyPage({Key? key}) : super(key: key);
 
@@ -20,6 +21,15 @@ class StudyPage extends StatefulWidget {
 
 class _StudyPageState extends State<StudyPage> {
   bool isOverlayVisible = false;
+  bool isOverlayVisible2 = false;
+  bool study = globalstudy;
+  bool resumed = globalresume;
+  final _controller = TextEditingController();
+  final _controller2 = TextEditingController();
+  int firstbox = 5;
+  int secondbox = 10;
+  int thirdbox = 15;
+
 
   void showOverlay() {
     setState(() {
@@ -32,10 +42,23 @@ class _StudyPageState extends State<StudyPage> {
       isOverlayVisible = false;
     });
   }
+  void showOverlay_here() {
+    setState(() {
+      isOverlayVisible2 = true;
+    });
+  }
+
+  void hideOverlay_here() {
+    setState(() {
+      isOverlayVisible2 = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     var timerProvider = Provider.of<TimerProvider>(context);
+    var timerProviderBreak = Provider.of<TimerProviderBreak>(context);
+
     
     return GestureDetector(
       onHorizontalDragUpdate: (DragUpdateDetails details) {
@@ -71,7 +94,17 @@ class _StudyPageState extends State<StudyPage> {
             Positioned(
               top: MediaQuery.of(context).size.height * 0.35,
               left: () {
-                if (timerProvider.seconds >= 600) {
+                var what;
+                if(study){
+                  what = timerProvider.seconds;
+                }else{
+                  what = timerProviderBreak.seconds;
+                }
+                if(what == 0){
+                    resumed = false;
+                    globalresume = false;
+                }
+                if (what >= 600) {
                   return MediaQuery.of(context).size.width / 2 -
                       (87 / 70) * MediaQuery.of(context).size.width / 5;
                 } else {
@@ -79,80 +112,264 @@ class _StudyPageState extends State<StudyPage> {
                       (65 / 70) * MediaQuery.of(context).size.width / 5;
                 }
               }(),
-              child: Text(
-                _formatCountdown(timerProvider.seconds),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: MediaQuery.of(context).size.width / 5,
-                  fontWeight: FontWeight.bold,
+              child: study
+                  ? Text(
+                      _formatCountdown(timerProvider.seconds),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: MediaQuery.of(context).size.width / 5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  : Text(
+                      _formatCountdown(timerProviderBreak.seconds),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: MediaQuery.of(context).size.width / 5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+              
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.width *0.43,
+              left:MediaQuery.of(context).size.width *0.22,
+              child: Container(
+                //color: Color.fromARGB(255, 50, 210, 228), // Set the background color here
+                padding: EdgeInsets.all(13.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0), // Adjust the border radius
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color.fromARGB(255, 158, 59, 173).withOpacity(0.1), Color.fromARGB(255, 44, 88, 185).withOpacity(0.2)],
+                  ),
+                  boxShadow:const  [
+                    BoxShadow(
+                      color: Color.fromARGB(255, 50, 210, 228), // Adjust the shadow color
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                      offset: Offset(0, 3), // Adjust the shadow offset
+                    ),
+                  ],
                 ),
-              ),
+                child :study
+                    ? const Text(
+                        "Study Session",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : const Text(
+                        "Break Session",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+              )
             ),
             // ... existing code ...
 
             // Pause Button
             Positioned(
-              top: MediaQuery.of(context).size.height * 0.6,
-              left: MediaQuery.of(context).size.width / 6,
+              top: MediaQuery.of(context).size.height * 0.58,
+              left: MediaQuery.of(context).size.width *0.2,
               child: ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    timerProvider.pauseTimer();
+                    if(resumed){
+                      resumed = false;
+                      globalresume = false;
+                      if(study){
+                        timerProvider.pauseTimer();
+                      }else{
+                        timerProviderBreak.pauseTimer();
+                      }
+                    }else{
+                      resumed = true;
+                      if(study){
+                        timerProvider.resumeTimer();
+                      }else{
+                        timerProviderBreak.resumeTimer();
+                      }
+                    }
                   });
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(16),
                 ),
-                child: const Text(
-                  ' Pause  ',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
+                child: Container(
+                  width: 200, // Adjust the width as needed
+                  height: 20,
+                  child: Center(
+                    child :resumed
+                      ? const Text(
+                        'Pause',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      )
+                    : const Text(
+                        'Resume',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      )
+                  )
 
-            // Resume Button
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.6,
-              left: MediaQuery.of(context).size.width * 0.6,
-              child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    timerProvider.resumeTimer();
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(16),
-                ),
-                child: const Text(
-                  'Resume',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
+                )
               ),
             ),
 
             // Set 5 Minutes Button
             Positioned(
-              top: MediaQuery.of(context).size.height * 0.7,
+              top: MediaQuery.of(context).size.height * 0.13,
+              left: MediaQuery.of(context).size.width / 9,
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    if(study){
+                      timerProvider.setSeconds(firstbox*60);
+                    }else{
+                      timerProviderBreak.setSeconds(firstbox*60);
+                    }
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                ),
+                child: Text(
+                  '${firstbox}m',
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.13,
               left: MediaQuery.of(context).size.width / 3,
               child: ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    
-                    timerProvider.setSeconds(300);
+                    if(study){
+                      timerProvider.setSeconds(secondbox*60);
+                    }else{
+                      timerProviderBreak.setSeconds(secondbox*60);
+                    }
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                ),
+                child: Text(
+                  '${secondbox}m',
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.13,
+              left: MediaQuery.of(context).size.width *5/9,
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    if(study){
+                      timerProvider.setSeconds(thirdbox*60);
+                    }else{
+                      timerProviderBreak.setSeconds(thirdbox*60);
+                    }
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                ),
+                child: Text(
+                  '${thirdbox}m',
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.66,
+              left: MediaQuery.of(context).size.width *0.39,
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    resumed = false;
+                    globalresume = false;
+                    if(study){
+                      timerProvider.pauseTimer();
+                      study = false;
+                      globalstudy = false;
+                    }else{
+                      timerProviderBreak.pauseTimer();
+                      study = true;
+                      globalstudy = true;
+                    }
+
+
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                ),
+                child: study
+                  ? const Text(
+                      'Break',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    )
+                  : const Text(
+                      'Study',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    )
+              ),
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.13,
+              left: MediaQuery.of(context).size.width *7/9,
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    isOverlayVisible2 = true;
                   });
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(16),
                 ),
                 child: const Text(
-                  'Set 5 Minutes',
+                  '>>',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 15,
                   ),
+                ),
+              ),
+            ),
+            Positioned.fill(
+              child:Visibility(
+                visible: isOverlayVisible2,
+                child: ScheduleAdder(
+                  controller: _controller,
+                  controller2: _controller2,
+                  onSave: () =>{
+                    //hideOverlay_here(),
+                    isOverlayVisible2 = false,
+                    
+                  },
+                  onCancel: hideOverlay_here,
+                  onClose: hideOverlay_here,
                 ),
               ),
             ),
@@ -185,154 +402,4 @@ class _StudyPageState extends State<StudyPage> {
 
 
 
-
-// class StudyPage extends StatefulWidget {
-//   const StudyPage({Key? key}) : super(key: key);
-
-//   @override
-//   _StudyPageState createState() => _StudyPageState();
-// }
-
-// class _StudyPageState extends State<StudyPage> {
-//   bool isOverlayVisible = false;
-//   bool isPaused = false;
-
-//   void showOverlay() {
-//     setState(() {
-//       isOverlayVisible = true;
-//     });
-//   }
-
-//   void hideOverlay() {
-//     setState(() {
-//       isOverlayVisible = false;
-//     });
-//   }
-
-
-//   @override
-//   Widget build(BuildContext context) {
-//     var timerProvider = Provider.of<TimerProvider>(context);
-//     return GestureDetector(
-//       onHorizontalDragUpdate: (DragUpdateDetails details) {
-//         if (details.primaryDelta! > 0) {
-//           _navigateToTasksPage(context);
-//         }
-//       },
-//       child: Scaffold(
-//         body: Stack(
-//           children: [
-//             Container(
-//               decoration: const BoxDecoration(
-//                 image: DecorationImage(
-//                   image: AssetImage('assets/StudyPage.png'),
-//                   fit: BoxFit.cover,
-//                 ),
-//               ),
-//             ),
-//             // Overlay
-//             Positioned.fill(
-//               child: Visibility(
-//                 visible: isOverlayVisible,
-//                 child: InfoOverlay(
-//                   onClose: hideOverlay,
-//                   overlayImage: 'assets/overlays/Study_info_overlay.png',
-//                 ),
-//               ),
-//             ),
-//             // CustomAppBar
-//             Positioned(
-//               top: 0,
-//               left: 0,
-//               right: 0,
-//               child: CustomAppBar(
-//                 title: 'Another Page',
-//                 showSettings: true,
-//                 showProfile: true,
-//                 showInfo: true,
-//                 infoCallback: showOverlay,
-//               ),
-//             ),
-//             // Countdown Clock (Centered and Bigger)
-//             Positioned(
-//               top: MediaQuery.of(context).size.height * 0.35,
-//               left: () {
-//                 if (timerProvider.seconds >= 600) {
-//                   return MediaQuery.of(context).size.width / 2 -
-//                       (87 / 70) * MediaQuery.of(context).size.width / 5;
-//                 } else {
-//                   return MediaQuery.of(context).size.width / 2 -
-//                       (65 / 70) * MediaQuery.of(context).size.width / 5;
-//                 }
-//               }(),
-//               child: Text(
-//                 _formatCountdown(timerProvider.seconds),
-//                 style: TextStyle(
-//                   color: Colors.white,
-//                   fontSize: MediaQuery.of(context).size.width / 5,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//             ),
-//             // Pause Button
-// // Pause Button
-//             Positioned(
-//               top: MediaQuery.of(context).size.height * 0.6,
-//               left: MediaQuery.of(context).size.width / 6,
-//               child: ElevatedButton(
-//                 onPressed: () {
-//                   setState(() {
-//                     timerProvider.pauseTimer();
-//                   });
-//                 },
-//                 style: ElevatedButton.styleFrom(
-//                   padding: EdgeInsets.all(16), // Increase padding to make the button bigger
-//                 ),
-//                 child: Text(
-//                   ' Pause  ',
-//                   style: TextStyle(
-//                     fontSize: 20, // Increase fontSize to make the text bigger
-//                   ),
-//                 ),
-//               ),
-//             ),
-
-//             // Resume Button
-//             Positioned(
-//               top: MediaQuery.of(context).size.height * 0.6,
-//               left: MediaQuery.of(context).size.width *0.6,
-//               child: ElevatedButton(
-//                 onPressed: () {
-//                   setState(() {
-//                     timerProvider.resumeTimer();
-//                   });
-//                 },
-//                 style: ElevatedButton.styleFrom(
-//                   padding: EdgeInsets.all(16), // Increase padding to make the button bigger
-//                 ),
-//                 child: Text(
-//                   'Resume',
-//                   style: TextStyle(
-//                     fontSize: 20, // Increase fontSize to make the text bigger
-//                   ),
-//                 ),
-//               ),
-//             ),
-
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   String _formatCountdown(int countdownSeconds) {
-//     int minutes = countdownSeconds ~/ 60;
-//     int seconds = countdownSeconds % 60;
-//     return '$minutes:${seconds.toString().padLeft(2, '0')}';
-//   }
-
-//   void _navigateToTasksPage(BuildContext context) {
-//     Navigator.pushNamed(context, '/taskspage');
-//   }
-// }
 

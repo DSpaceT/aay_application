@@ -14,6 +14,7 @@ import 'profilepage.dart';
 import 'homepage.dart';
 
 import 'utils/time_provider.dart';
+import 'utils/timer_provider_break.dart';
 
 
 void main() async{
@@ -35,8 +36,17 @@ void main() async{
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => TimerProvider(10),
+    // return ChangeNotifierProvider(
+    //   create: (context) => TimerProvider(10),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<TimerProvider>(
+          create: (context) => TimerProvider(0),
+        ),
+        ChangeNotifierProvider<TimerProviderBreak>(
+          create: (context) => TimerProviderBreak(0),
+        ),
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(

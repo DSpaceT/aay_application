@@ -5,20 +5,13 @@ import 'package:flutter/foundation.dart';
 // utils/time_provider.dart
 
 
-class TimerProvider with ChangeNotifier {
+class TimerProviderBreak with ChangeNotifier {
   late Timer _timer;
   int _seconds;
   bool _isPaused = false;
 
-  TimerProvider(this._seconds) {
+  TimerProviderBreak(this._seconds) {
     _timer = Timer.periodic(Duration(seconds: 1), _updateTimer);
-  }
-  bool pausedwhoknows(){
-    if(_isPaused){
-      return true;
-    }else {
-      return false;
-    }
   }
 
   void _updateTimer(Timer timer) {
@@ -31,8 +24,13 @@ class TimerProvider with ChangeNotifier {
   }
 
   int get seconds => _seconds;
-
-
+  bool pausedwhoknows(){
+    if(_isPaused){
+      return true;
+    }else {
+      return false;
+    }
+  }
   void pauseTimer() {
     _isPaused = true;
   }
