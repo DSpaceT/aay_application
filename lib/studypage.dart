@@ -24,8 +24,8 @@ class _StudyPageState extends State<StudyPage> {
   bool isOverlayVisible2 = false;
   bool study = globalstudy;
   bool resumed = globalresume;
-  final _controller = TextEditingController();
-  final _controller2 = TextEditingController();
+  int selectedMinutes = 0;
+
   int firstbox = 5;
   int secondbox = 10;
   int thirdbox = 15;
@@ -361,15 +361,25 @@ class _StudyPageState extends State<StudyPage> {
               child:Visibility(
                 visible: isOverlayVisible2,
                 child: ScheduleAdder(
-                  controller: _controller,
-                  controller2: _controller2,
                   onSave: () =>{
                     //hideOverlay_here(),
-                    isOverlayVisible2 = false,
+                    setState(() {
+                      isOverlayVisible2 = false;
+                      if(study){
+                        timerProvider.setSeconds(selectedMinutes*60);
+                      }else{
+                        timerProviderBreak.setSeconds(selectedMinutes*60);
+                      }
+                    }),
                     
                   },
                   onCancel: hideOverlay_here,
                   onClose: hideOverlay_here,
+                  onMinutesSelected: (minutes) {
+                    setState(() {    
+                      selectedMinutes = minutes;
+                    });
+                  },
                 ),
               ),
             ),

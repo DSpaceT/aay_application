@@ -3,19 +3,17 @@ import 'overlay_function.dart';
 import 'minutes_selector.dart';
 
 class ScheduleAdder extends StatefulWidget {
-  final TextEditingController controller;
-  final TextEditingController controller2;
   final VoidCallback onSave;
   final VoidCallback onCancel;
   final VoidCallback onClose;
+  final ValueChanged<int> onMinutesSelected;
 
   ScheduleAdder({
     Key? key,
-    required this.controller,
-    required this.controller2,
     required this.onSave,
     required this.onCancel,
     required this.onClose,
+    required this.onMinutesSelected,
   }) : super(key: key);
 
   @override
@@ -23,6 +21,7 @@ class ScheduleAdder extends StatefulWidget {
 }
 
 class _ScheduleAdderState extends State<ScheduleAdder> {
+  int selectedMinutes = 0;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -33,7 +32,14 @@ class _ScheduleAdderState extends State<ScheduleAdder> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
 
-            ScrollableMinutesSelector(),
+            ScrollableMinutesSelector(
+              onMinutesSelected: (minutes) {
+                setState(() {
+                  selectedMinutes = minutes;
+                  widget.onMinutesSelected(selectedMinutes);
+                });
+            },
+            ),
 
 
             // buttons -> save + cancel
@@ -42,9 +48,10 @@ class _ScheduleAdderState extends State<ScheduleAdder> {
               children: [
                 // save button
                 MyButton(
-                  text: "Save",
+                  text: "Set",
                   onPressed:()=>{
                     widget.onSave(),
+                    // widget.onMinutesSelected(selectedMinutes),
                   }),
 
                 const SizedBox(width: 8),
@@ -54,8 +61,6 @@ class _ScheduleAdderState extends State<ScheduleAdder> {
                   text: "Cancel",
                    onPressed: ()=>{
                     widget.onCancel(),
-                    widget.controller.clear(),
-                    widget.controller2.clear(),
                   },
                 ),
 

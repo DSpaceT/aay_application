@@ -13,6 +13,9 @@ dependencies:
   cloud_firestore: ^4.13.6
   device_info: ^2.0.3
   provider: ^5.0.0
+  app_settings: ^5.1.1
+  url_launcher: ^6.0.9
+  android_intent: ^2.0.2
 
   
 
@@ -40,4 +43,8 @@ flutter:
     - assets/overlays/Places_info_overlay.png
     - assets/overlays/Music_info_overlay.png
     - assets/overlays/Empty_overlay.png
+    - assets/places/Mickel_place.png
+    - assets/places/Coffee_island_place.png
+    - assets/places/BooksBeans_place.png
+    - assets/places/Starbucks_place.png
   uses-material-design: true

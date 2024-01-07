@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ScrollableMinutesSelector extends StatefulWidget {
+  final ValueChanged<int> onMinutesSelected;
+  ScrollableMinutesSelector({required this.onMinutesSelected});
   @override
   _ScrollableMinutesSelectorState createState() => _ScrollableMinutesSelectorState();
 }
@@ -21,6 +23,7 @@ class _ScrollableMinutesSelectorState extends State<ScrollableMinutesSelector> {
 
             // Ensure the selected minutes stay within the valid range (0 to 59)
             selectedMinutes = selectedMinutes.clamp(0, 59);
+            widget.onMinutesSelected(selectedMinutes);
           });
         },
         child: Container(

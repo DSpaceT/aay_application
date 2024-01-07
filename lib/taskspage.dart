@@ -143,22 +143,7 @@ class _TasksPageState extends State<TasksPage> {
     //setState(() {});
   }
 
-  // Future<void> _addTaskToFirestore(String newtitle, String newdescription) async {
-  //   if (userId.isNotEmpty) {
-  //     await FirebaseFirestore.instance
-  //         .collection('users')
-  //         .doc(userId)
-  //         .collection('tasks')
-  //         .add({
-  //           'title': newtitle,
-  //           'description': newdescription,
-  //           'id': number.toString(),
-  //           'isCompleted': false,
-  //         });
-  //   }
-
-  //   number++;
-  // }
+ 
   Future<void> _addTaskToFirestore(String newtitle, String newdescription) async {
   if (userId.isNotEmpty) {
     await FirebaseFirestore.instance
