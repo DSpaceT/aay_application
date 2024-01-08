@@ -50,4 +50,7 @@ flutter:
     - assets/places/Coffee_island_place.png
     - assets/places/BooksBeans_place.png
     - assets/places/Starbucks_place.png
+    - assets/profile_images/Points_image.png
+    - assets/profile_images/Todo_image.png
+    - assets/ProfilePage.png
   uses-material-design: true
