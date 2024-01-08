@@ -27,6 +27,7 @@ android {
     namespace "com.example.aay_application"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
+    //ndkVersion 31
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

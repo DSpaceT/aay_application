@@ -191,6 +191,7 @@ class _StudyPageState extends State<StudyPage> {
                       }
                     }else{
                       resumed = true;
+                      globalresume = true;
                       if(study){
                         timerProvider.resumeTimer();
                       }else{

@@ -15,6 +15,10 @@ import 'homepage.dart';
 
 import 'utils/time_provider.dart';
 import 'utils/timer_provider_break.dart';
+import 'utils/points_counter.dart';
+
+
+
 
 
 void main() async{
@@ -46,6 +50,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<TimerProviderBreak>(
           create: (context) => TimerProviderBreak(0),
         ),
+        ChangeNotifierProvider<PointsCounter>(
+          create: (context) => PointsCounter(0),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -67,27 +74,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// class MyApp extends StatelessWidget {
-//   const MyApp({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Demo',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       // Define the routes
-//       routes: {
-//         '/': (context) => const MyHomePage(),
-//         '/studypage': (context) => const PlacesPage(),
-//         '/coffeeplaces' : (context) => const StudyPage(),
-//         '/taskspage' : (context) => const TasksPage(),
-//         '/musicpage' : (context) => const MusicPage(),
-//         '/settingspage': (context) => const SettingsPage(),
-//         '/profilepage' : (context) => const ProfilePage(),
-//       },
-//     );
-//   }
-// }
 
