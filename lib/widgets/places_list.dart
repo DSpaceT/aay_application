@@ -9,6 +9,9 @@ import 'package:tuple/tuple.dart';
 
 bool globalresumed = false;
 bool globalstarted = true;
+List<bool> globalinitialvalues = [false,false,false,false];
+
+Color checkboxColor = Colors.white;
 
 
 class Place {
@@ -43,6 +46,7 @@ class _PlacesListState extends State<PlacesList> {
   bool resumed = globalresumed;
   bool started = globalstarted;
   late Position alpha;
+  List<bool> initialvalues = globalinitialvalues;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +56,10 @@ class _PlacesListState extends State<PlacesList> {
       globalstarted = false;
       points.pauseTimer();
     }
+    for(int i = 0 ; i < widget.places.length; i++){
+      widget.places[i].isCompleted = initialvalues[i];
+    }
+
     return Column(
       children: [
         for (int index = 0; index < widget.places.length; index++)
@@ -71,10 +79,12 @@ class _PlacesListState extends State<PlacesList> {
                 SizedBox(width: 10),
                 Checkbox(
                   value: widget.places[index].isCompleted,
+                  activeColor: checkboxColor,
                   onChanged: (bool? newValue) async {
                     // Handle checkbox value change
                     Position cur_location = await LocationHelper.getLocation();
                     setState(() {
+                      globalinitialvalues[index] = newValue ?? false;
                       widget.places[index].isCompleted = newValue ?? false;
                       resumed = false;
                       int counter = 0;
@@ -89,9 +99,13 @@ class _PlacesListState extends State<PlacesList> {
                       if(resumed && counter ==1){
                         if (cur_location.latitude.toInt() == widget.places[index_checked].location.item1 && 
                           cur_location.longitude.toInt() == widget.places[index_checked].location.item2){
+                            // globalinitialvalues[index] = newValue ?? false;
+                            // widget.places[index].isCompleted = newValue ?? false;
+                            checkboxColor = Colors.green;
                             points.resumeTimer();
                           }
                       }else{
+                        checkboxColor = Colors.white;
                         points.pauseTimer();
                       }
                       // Update the isCompleted property when the checkbox is pressed

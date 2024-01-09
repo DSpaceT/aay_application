@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 // utils/time_provider.dart
@@ -9,6 +10,7 @@ class TimerProvider with ChangeNotifier {
   late Timer _timer;
   int _seconds;
   bool _isPaused = false;
+  late String userId;
 
   TimerProvider(this._seconds) {
     _timer = Timer.periodic(Duration(seconds: 1), _updateTimer);
@@ -54,4 +56,5 @@ class TimerProvider with ChangeNotifier {
     _timer.cancel();
     super.dispose();
   }
+
 }

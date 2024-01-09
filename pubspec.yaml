@@ -19,6 +19,7 @@ dependencies:
   geolocator: ^8.2.0
   geocoding: ^2.0.4
   tuple: ^2.0.2
+  audioplayers: ^0.20.1
 
   
 
@@ -46,6 +47,7 @@ flutter:
     - assets/overlays/Places_info_overlay.png
     - assets/overlays/Music_info_overlay.png
     - assets/overlays/Empty_overlay.png
+    - assets/overlays/Profile_info_overlay.png
     - assets/places/Mickel_place.png
     - assets/places/Coffee_island_place.png
     - assets/places/BooksBeans_place.png
@@ -53,4 +55,5 @@ flutter:
     - assets/profile_images/Points_image.png
     - assets/profile_images/Todo_image.png
     - assets/ProfilePage.png
+    - assets/audio/Music_is_Love.mp3
   uses-material-design: true

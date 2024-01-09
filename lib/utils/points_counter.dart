@@ -96,6 +96,7 @@ class PointsCounter with ChangeNotifier {
   Future<void> _initializeData() async {
     userId = await DeviceUtils.getDeviceId();
   }
+
   Future<void> _fetchInitialPoints() async {
     if (userId.isNotEmpty) {
       DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
@@ -104,9 +105,24 @@ class PointsCounter with ChangeNotifier {
           .get();
 
       if (userSnapshot.exists) {
-        _points = userSnapshot['points'] ?? 0;
+        Map<String, dynamic>? userData = userSnapshot.data() as Map<String, dynamic>?;
+
+        if (userData != null && userData.containsKey('points')) {
+          // Field "points" exists, retrieve its value
+          _points = userData['points'] ?? 0;
+        } else {
+          // Field "points" doesn't exist, create it with an initial value
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .update({'points': 0});
+          _points = 0;
+        }
+
         notifyListeners();
       }
     }
   }
+
+
 }

@@ -66,6 +66,22 @@ class _StudyPageState extends State<StudyPage> {
           _navigateToTasksPage(context);
         }
       },
+      onTapUp: (TapUpDetails details) {
+        // Get the position of the tap
+        double tapPosition = details.globalPosition.dy;
+        
+        // Get the screen height
+        double screenHeight = MediaQuery.of(context).size.height;
+
+        // Calculate the threshold for the bottom 1/7 of the screen
+        double bottomThreshold = screenHeight * (6 / 7);
+
+        // Check if the tap is in the bottom 1/7 of the screen
+        if (tapPosition > bottomThreshold) {
+          // Call the function for the bottom 1/7 of the screen
+          _navigateToMusicPage(context);
+        }
+      },
       child: Scaffold(
         body: Stack(
           children: [
@@ -406,6 +422,9 @@ class _StudyPageState extends State<StudyPage> {
 
   void _navigateToTasksPage(BuildContext context) {
     Navigator.pushNamed(context, '/taskspage');
+  }
+  void _navigateToMusicPage(BuildContext context) {
+    Navigator.pushNamed(context, '/musicpage');
   }
 
   // ... rest of the class remains unchanged ...

@@ -6,14 +6,6 @@ import 'utils/device_id.dart';
 import 'widgets/places_list.dart';
 import 'package:tuple/tuple.dart';
 
-// bool globalresume = false;
-// bool globalcheckboxvalue = false;
-// bool globalstart = false;
-// int globalid = 0;
-// bool globalstarbucks = false;
-// bool globalcoffeeisland = false;
-// bool globalmickel = false;
-// bool globalbooksbeans = false;
 
 class PlacesPage extends StatefulWidget {
   const PlacesPage({Key? key}) : super(key: key);
@@ -24,18 +16,11 @@ class PlacesPage extends StatefulWidget {
 
 class _PlacesPageState extends State<PlacesPage> {
   bool isOverlayVisible = false;
-  // bool isCheckboxSelected = globalcheckboxvalue;
-  // bool resumed = globalresume;
-  // bool started = globalstart;
-  // int id = globalid;
-  // bool starbucks = globalstarbucks;
-  // bool coffeeisland = globalcoffeeisland;
-  // bool mickel = globalmickel;
-  // bool booksbeans = globalbooksbeans;
+
   late String userId; // User ID
 
   List<Place> placesList = [
-    Place(name: 'starbucks', imageAsset: 'assets/places/Starbucks_place.png', isCompleted: false,location: Tuple2(37, 23),),
+    Place(name: 'starbucks', imageAsset: 'assets/places/Starbucks_place.png', isCompleted: false,location: Tuple2(37, -122),),
     Place(name: 'coffee island', imageAsset: 'assets/places/Coffee_island_place.png', isCompleted: false,location: Tuple2(40.7128, -74.0060),),
     Place(name: 'Mickel', imageAsset: 'assets/places/Mickel_place.png', isCompleted: false,location: Tuple2(100, 234),),
     Place(name: 'BooksBeans', imageAsset: 'assets/places/BooksBeans_place.png', isCompleted: false,location: Tuple2(100, 234),),
@@ -68,12 +53,6 @@ class _PlacesPageState extends State<PlacesPage> {
   }
 
   Widget _buildContent(){
-    // var points = Provider.of<PointsCounter>(context);
-    // if (!started) {
-    //   points.pauseTimer();
-    //   started = true;
-    //   globalstart = true;
-    // }
 
     return GestureDetector(
       onHorizontalDragUpdate: (DragUpdateDetails details) {
@@ -104,20 +83,19 @@ class _PlacesPageState extends State<PlacesPage> {
                 infoCallback: showOverlay,
               ),
             ),
-            // Overlay
-            Visibility(
-              visible: isOverlayVisible,
-              child: InfoOverlay(
-                onClose: hideOverlay,
-                overlayImage: 'assets/overlays/Places_info_overlay.png',
-              ),
-            ),
             Positioned(
               top: 200,
               left: 0,
               child: PlacesList(
                 places: placesList,
                 userId: userId,
+              ),
+            ),
+            Visibility(
+              visible: isOverlayVisible,
+              child: InfoOverlay(
+                onClose: hideOverlay,
+                overlayImage: 'assets/overlays/Places_info_overlay.png',
               ),
             ),
           ],

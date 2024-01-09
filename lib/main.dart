@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
           '/studypage': (context) => const PlacesPage(),
           '/coffeeplaces': (context) => const StudyPage(),
           '/taskspage': (context) => const TasksPage(),
-          '/musicpage': (context) => const MusicPage(),
+          '/musicpage': (context) => MusicPage(),
           '/settingspage': (context) => const SettingsPage(),
           '/profilepage': (context) => const ProfilePage(),
         },
