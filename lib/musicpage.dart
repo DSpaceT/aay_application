@@ -1,26 +1,109 @@
+
+
+
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'widgets/custom_appbar.dart';
+import 'widgets/audio_list.dart';
 
-class MusicPage extends StatelessWidget {
-  final AudioCache audioCache;
+bool globalstarted = false;
+bool globalisPlaying = false;
+AudioPlayer globalplayer = AudioPlayer();
+String playingnow = "false";
+String playingprev = "false";
+bool globalchange = false;
 
-  // Factory constructor to initialize audioCache
-  factory MusicPage() {
-    return MusicPage._(AudioCache());
+
+class MusicPage extends StatefulWidget {
+  const MusicPage({super.key});
+
+  @override
+  State<MusicPage> createState() => _MusicPageState();
+}
+
+class _MusicPageState extends State<MusicPage> {
+  late AudioPlayer player;
+  late bool isPlaying;
+  late bool started;
+  late List<AudioItem> audioItems;
+
+  @override
+  void initState() {
+    super.initState();
+
+    player = globalplayer;
+    isPlaying = globalisPlaying;
+    started = globalstarted;
+
+    audioItems = [
+      AudioItem(
+        player: player,
+        assettoplay: 'audio/Music_is_Love.mp3',
+        onPressed: () {
+          playingnow = "Music_is_Love";
+          onpressed();
+        },
+      ),
+      AudioItem(
+        player:player,
+        assettoplay: 'audio/Inception.mp3',
+        onPressed: (){
+          playingnow = "Inception";
+          onpressed();
+        }
+        ),
+    ];
+    //globalwidgets = audioItems;
+
+    player.onPlayerStateChanged.listen((PlayerState state) {
+      if (state == PlayerState.completed) {
+        // Song has completed, restart it
+        setState(() {
+          isPlaying = false;
+          globalisPlaying = false;
+        });
+        player.seek(Duration.zero);
+      }
+    });
   }
 
-  // Private named constructor for initialization
-  MusicPage._(this.audioCache);
-
-  void _playAudio(String audioFileName) {
-    audioCache.play('../assets/audio/$audioFileName.mp3');
+  void onpressed() {
+    if (!started) {
+      started = true;
+      globalstarted = true;
+      isPlaying = false;
+      globalisPlaying = false;
+      playingprev = playingnow;
+      player.play(AssetSource('audio/${playingnow}.mp3'));
+    } else if(playingprev!=playingnow){
+      globalchange = true;
+      print("stopping one start other");
+      player.pause();
+      player.stop();
+      player.play(AssetSource('audio/${playingnow}.mp3'));
+      playingprev = playingnow;
+      isPlaying = !isPlaying;
+    }
+    else {
+      if (isPlaying) {
+        print("pausing");
+        player.pause();
+      } else {
+        print("resuming");
+        player.resume();
+      }
+    }
+    setState(() {
+      isPlaying = !isPlaying;
+      globalisPlaying = !globalisPlaying;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      appBar: AppBar(
+        title: Text("daboudai"),
+      ),
       body: Stack(
         children: [
           Container(
@@ -31,115 +114,40 @@ class MusicPage extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: CustomAppBar(
-              title: 'Profile Page',
-              showSettings: true,
-              showProfile: false,
-              showInfo: true,
-              //infoCallback: showOverlay,
-              // You can add other properties/callbacks as needed
+        Positioned(
+          top: MediaQuery.of(context).size.height * 0.2,
+          left: MediaQuery.of(context).size.width * 0.05,
+          child: Container(
+            width: 350,
+            padding: EdgeInsets.all(8.0),  // Adjust padding as needed
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 226, 106, 178),  // Set container color to purple
+              borderRadius: BorderRadius.circular(8.0),  // Optional: Add rounded corners
+            ),
+            child: Text(
+              "Playing now :"+playingnow,
+              style: TextStyle(
+                color: Color.fromARGB(255, 62, 17, 110),        // Set text color to pink
+                fontSize: 24,              // Set font size to 24
+                fontWeight: FontWeight.bold,  // Make the text bold
+              ),
             ),
           ),
-          Positioned(
-            top: 100,
-            child:ElevatedButton(
-              onPressed: () => _playAudio('Music_is_Love'),
-              child: Text('Play Audio 1'),
-            ),
+        ),
+
+          ListView.builder(
+            itemCount: 1 + audioItems.length,
+            padding: EdgeInsets.only(top: 200.0),
+            itemExtent: 60.0,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return SizedBox.shrink();
+              }
+              return audioItems[index - 1];
+            },
           ),
-          // Positioned(
-          //   top:200,
-          //   child:ElevatedButton(
-          //     onPressed: () => _playAudio('audio_file2'),
-          //     child: Text('Play Audio 2'),
-          //   ),
-          // ),
-          // Positioned(
-          //   top:300,
-          //   child:ElevatedButton(
-          //     onPressed: () => _playAudio('audio_file3'),
-          //     child: Text('Play Audio 3'),
-          //   ),
-          // ),
-          ],
-        ));
+        ],
+      ),
+    );
   }
 }
-
-
-// import 'package:flutter/material.dart';
-// import 'widgets/overlay_function.dart';
-// import 'widgets/custom_appbar.dart';
-
-// class MusicPage extends StatefulWidget {
-//   const MusicPage({Key? key}) : super(key: key);
-
-//   @override
-//   _MusicPageState createState() => _MusicPageState();
-// }
-
-// class _MusicPageState extends State<MusicPage> {
-//   bool isOverlayVisible = false;
-
-//   void showOverlay() {
-//     setState(() {
-//       isOverlayVisible = true;
-//     });
-//   }
-
-//   void hideOverlay() {
-//     setState(() {
-//       isOverlayVisible = false;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onHorizontalDragUpdate: (DragUpdateDetails details) {
-//         // Handle horizontal drag updates if needed
-//       },
-//       child: Scaffold(
-//         body: Stack(
-//           children: [
-//             // Background Image
-//             Container(
-//               decoration: const BoxDecoration(
-//                 image: DecorationImage(
-//                   image: AssetImage('assets/MusicPage.png'),
-//                   fit: BoxFit.cover,
-//                 ),
-//               ),
-//             ),
-//             // CustomAppBar
-//             Positioned(
-//               top: 0,
-//               left: 0,
-//               right: 0,
-//               child: CustomAppBar(
-//                 title: 'Music Page',
-//                 showSettings: false,
-//                 showProfile: true,
-//                 showInfo: true,
-//                 infoCallback: showOverlay,
-//               ),
-//             ),
-//             // Overlay
-//             Visibility(
-//               visible: isOverlayVisible,
-//               child: InfoOverlay(
-//                 onClose: hideOverlay,
-//                 overlayImage: 'assets/overlays/Music_info_overlay.png', // Change the overlay image
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-// }

@@ -19,7 +19,8 @@ dependencies:
   geolocator: ^8.2.0
   geocoding: ^2.0.4
   tuple: ^2.0.2
-  audioplayers: ^0.20.1
+  audioplayers: ^1.1.0
+  
 
   
 
@@ -56,4 +57,5 @@ flutter:
     - assets/profile_images/Todo_image.png
     - assets/ProfilePage.png
     - assets/audio/Music_is_Love.mp3
+    - assets/audio/Inception.mp3
   uses-material-design: true
