@@ -112,6 +112,8 @@ class _TasksPageState extends State<TasksPage> {
                   //hideOverlay_here(),
                   isOverlayVisible = false,
                   _addTask(_controller.text, _controller2.text),
+                  _controller.clear(),
+                  _controller2.clear(),
                 },
                 onCancel: hideOverlay_here,
                 onClose: hideOverlay_here,

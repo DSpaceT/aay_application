@@ -2,6 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../utils/device_id.dart';
+
+int globaltaskcompletedcounter = 0;
+
 
 class Task {
   String id;
@@ -34,8 +38,25 @@ class TasksList extends StatefulWidget {
 
 class _TasksListState extends State<TasksList> {
 
+  late int taskscompleted = 0;
+  late String userId;
+
+
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<void>(
+      future: _initializeData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return _buildContent();
+        } else {
+          return CircularProgressIndicator(); // Loading indicator
+        }
+      },
+    );
+  }
+
+  Widget _buildContent() {
     return ListView.builder(
       itemCount: widget.tasks.length + 1, // Add 1 for the "Add Task" button
       itemBuilder: (context, index) {
@@ -79,10 +100,23 @@ class _TasksListState extends State<TasksList> {
                   Checkbox(
                     value: widget.tasks[index].isCompleted,
                     onChanged: (bool? value) async {
+                      int counter = 0;
+                      if(value == true){
+                        globaltaskcompletedcounter++;
+                        counter++;
+                      }else{
+                        globaltaskcompletedcounter--;
+                        counter--;
+                      }
+                      print(globaltaskcompletedcounter);
                       setState(() {
                         // Update the isCompleted property when the checkbox is pressed
                         widget.tasks[index].isCompleted = value ?? false;
                       });
+                      await updateTasksCompletedToFirestore(counter+taskscompleted);
+                      print("global tasks $globaltaskcompletedcounter");
+                      print("tasks completed $taskscompleted");
+
                       await updateTaskInFirestore(widget.tasks[index]);
                     },
                   ),
@@ -95,6 +129,11 @@ class _TasksListState extends State<TasksList> {
       },
     );
   }
+  Future<void> _initializeData() async {
+    userId = await DeviceUtils.getDeviceId();
+    taskscompleted = await _fetchInitialTasksCompleted();
+  }
+
   Future<void> updateTaskInFirestore(Task task) async {
     if (widget.userId.isNotEmpty) {
       final tasksCollection = FirebaseFirestore.instance
@@ -151,9 +190,42 @@ class _TasksListState extends State<TasksList> {
       print("User ID is empty. Deletion aborted.");
     }
   }
+  Future<void> updateTasksCompletedToFirestore(int tasksnowcompleted) async {
+    if (widget.userId.isNotEmpty) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.userId)
+          .update({
+            'taskscompleted':tasksnowcompleted,
+          })
+          .catchError((error) {
+            // Handle any errors here
+            print('Error adding task to Firestore: $error');
+          });
+    }
+  }
+  Future<int> _fetchInitialTasksCompleted() async {
+    var tasksgetter;
+    if (userId.isNotEmpty) {
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
 
+      if (userSnapshot.exists) {
+        Map<String, dynamic>? userData = userSnapshot.data();
 
+        if (userData != null && userData.containsKey('taskscompleted')) {
+          // Field "points" exists, retrieve its value
+          tasksgetter = userData['taskscompleted'] ?? 0;
+        } else {
+          // Field "points" doesn't exist, handle accordingly
+        }
+      }
+    }
+    return tasksgetter;
 
+  }
 
 }
 

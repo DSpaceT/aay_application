@@ -58,4 +58,7 @@ flutter:
     - assets/ProfilePage.png
     - assets/audio/Music_is_Love.mp3
     - assets/audio/Inception.mp3
+    - assets/coupons/Coupon_mickel.png
+    - assets/coupons/Coupon_mickel_2.png
+    - assets/coupons/Coupon_starbucks.png
   uses-material-design: true
