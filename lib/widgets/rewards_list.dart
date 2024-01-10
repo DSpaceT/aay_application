@@ -1,15 +1,21 @@
+
+
 // tasks.dart
 
 import 'package:flutter/material.dart';
-
+import '../profilepage.dart';
 
 class Reward extends StatefulWidget {
   final String name;
   final String imageAsset;
+  final Function(int) onButtonPressed;
+  final int index;
   
   const Reward({
     required this.name,
     required this.imageAsset,
+    required this.onButtonPressed,
+    required this.index,
   });
 
   @override
@@ -17,13 +23,14 @@ class Reward extends StatefulWidget {
 }
 
 class _RewardState extends State<Reward> {
-
   @override
 Widget build(BuildContext context) {
   return ListTile(
     title: ElevatedButton(
       onPressed: () {
-        // Add your button click logic here
+        print("wtf");
+        widget.onButtonPressed(widget.index);
+        print("executed");
       },
       style: ElevatedButton.styleFrom(
         primary: Colors.transparent, // Set the button background color to transparent
@@ -35,44 +42,9 @@ Widget build(BuildContext context) {
         fit: BoxFit.cover,
       ),
     ),
+
   );
+  
 }
 
-
-
-//   @override
-//   Widget build(BuildContext context) {
-// return Padding(
-//   padding: EdgeInsets.only(top: 50,left:40), // Adjust the top padding as needed
-//   child: Column(
-//     children: [
-//       for (int index = 0; index < widget.places.length; index++)
-//         Column(
-//           children: [
-//             Container(
-//               child: Row(
-//                 children: [
-//                   Container(
-//                     width: 300,
-//                     height: 100,
-//                     decoration: BoxDecoration(
-//                       image: DecorationImage(
-//                         image: AssetImage(widget.places[index].imageAsset),
-//                         fit: BoxFit.cover,
-//                       ),
-//                     ),
-//                   ),
-//                   SizedBox(width: 10),
-//                   // Other widgets you want to add in the row
-//                 ],
-//               ),
-//             ),
-//             SizedBox(height: 10), // Adjust the height as needed for vertical spacing
-//           ],
-//         ),
-//     ],
-//   ),
-// );
-
-//   }
 }

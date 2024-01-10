@@ -1,11 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'widgets/custom_appbar.dart';
 import 'utils/device_id.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'widgets/overlay_function.dart';
 import 'widgets/rewards_list.dart';
+import 'widgets/rewards_list.dart';
 
 bool globalrewards = false;
+int lengthrewards = 0;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -21,13 +24,17 @@ class _ProfilePageState extends State<ProfilePage> {
   bool isOverlayVisible = false;
   bool rewards = globalrewards;
   bool isOverlayVisiblecoupon = false;
+  String overlaycoupon = "false";
 
-  List<Reward> rewardsList = [
-  Reward(name: 'Mickel coupon', imageAsset: 'assets/coupons/Coupon_mickel.png'),
-  Reward(name: 'Mickel coupon 2', imageAsset: 'assets/coupons/Coupon_mickel_2.png'),
-  Reward(name: 'Starbucks coupon', imageAsset: 'assets/coupons/Coupon_starbucks.png'),
-  // Add more Place instances as needed
-];
+  List<Reward> rewardsList = [];
+
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
 
   void showOverlay() {
     setState(() {
@@ -41,22 +48,11 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  void showOverlaycoupon() {
-    setState(() {
-      isOverlayVisiblecoupon = true;
-    });
-  }
 
-  void hideOverlaycoupon() {
-    setState(() {
-      isOverlayVisiblecoupon = false;
-    });
-  }
-  
 
-  @override
   @override
   Widget build(BuildContext context) {
+    lengthrewards = rewardsList.length;
     return FutureBuilder<void>(
       future: _initializeData(),
       builder: (context, snapshot) {
@@ -80,20 +76,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 image: AssetImage('assets/ProfilePage.png'),
                 fit: BoxFit.cover,
               ),
-            ),
-          ),
-          // CustomAppBar
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: CustomAppBar(
-              title: 'Profile Page',
-              showSettings: true,
-              showProfile: false,
-              showInfo: true,
-              infoCallback: showOverlay,
-              // You can add other properties/callbacks as needed
             ),
           ),
           // Your ProfilePage content goes here
@@ -201,12 +183,38 @@ class _ProfilePageState extends State<ProfilePage> {
               ]
             ),
           ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: CustomAppBar(
+              title: 'Profile Page',
+              showSettings: true,
+              showProfile: false,
+              showInfo: true,
+              infoCallback: showOverlay,
+              // You can add other properties/callbacks as needed
+            ),
+          ),
           Positioned.fill(
               child: Visibility(
                 visible: isOverlayVisible,
                 child: InfoOverlay(
                   onClose: hideOverlay,
                   overlayImage: 'assets/overlays/Profile_info_overlay.png',
+                ),
+              ),
+            ),
+          Positioned.fill(
+              child: Visibility(
+                visible: isOverlayVisiblecoupon,
+                child: InfoOverlay(
+                  onClose:(){
+                    setState(() {
+                      isOverlayVisiblecoupon = false;
+                    });
+                  },
+                  overlayImage: overlaycoupon,//'assets/overlays/Profile_info_overlay.png',
                 ),
               ),
             ),
@@ -218,9 +226,42 @@ class _ProfilePageState extends State<ProfilePage> {
     userId = await DeviceUtils.getDeviceId();
     points = await _fetchInitialPoints();
     taskscompleted = await _fetchInitialTasksCompleted();
+    rewardsList = [
+      Reward(
+        name: 'Mickel coupon',
+        imageAsset: 'assets/coupons/Coupon_mickel.png',
+        onButtonPressed: toggleCouponOverlayVisibility,
+        index:1,
+      ),
+      Reward(
+        name: 'Mickel coupon 2',
+        imageAsset: 'assets/coupons/Coupon_mickel_2.png',
+        onButtonPressed: toggleCouponOverlayVisibility,
+        index:2,
+      ),
+      Reward(
+        name: 'Starbucks coupon',
+        imageAsset: 'assets/coupons/Coupon_starbucks.png',
+        onButtonPressed: toggleCouponOverlayVisibility,
+        index :3,
+      ),
+      // Add more Reward instances as needed
+    ];
+  }
+  void toggleCouponOverlayVisibility(int index) {
+    if(index == 1 || index == 2){
+      overlaycoupon = "assets/coupon_codes/Coupon_code_1.png";
+    }else{
+      overlaycoupon = "assets/coupon_codes/Coupon_code_2.png";
+    }
+    print("i am here");
+    setState(() {
+      print("state changed");
+      isOverlayVisiblecoupon = !isOverlayVisiblecoupon;//!isOverlayVisiblecoupon;
+    });
   }
   Future<int> _fetchInitialPoints() async {
-    var pointsgetter;
+    var pointsgetter = 0;
     if (userId.isNotEmpty) {
       DocumentSnapshot<Map<String, dynamic>> userSnapshot = await FirebaseFirestore.instance
           .collection('users')
@@ -242,7 +283,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   }
     Future<int> _fetchInitialTasksCompleted() async {
-    var tasksgetter;
+    var tasksgetter = 0;
     if (userId.isNotEmpty) {
       DocumentSnapshot<Map<String, dynamic>> userSnapshot = await FirebaseFirestore.instance
           .collection('users')
