@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'utils/time_provider.dart';
 import 'utils/timer_provider_break.dart';
 
+import 'package:vibration/vibration.dart';
 
 bool globalstudy = true;
 bool globalresume = false;
@@ -30,7 +31,6 @@ class _StudyPageState extends State<StudyPage> {
   int secondbox = 10;
   int thirdbox = 15;
 
-
   void showOverlay() {
     setState(() {
       isOverlayVisible = true;
@@ -42,6 +42,7 @@ class _StudyPageState extends State<StudyPage> {
       isOverlayVisible = false;
     });
   }
+
   void showOverlay_here() {
     setState(() {
       isOverlayVisible2 = true;
@@ -59,7 +60,6 @@ class _StudyPageState extends State<StudyPage> {
     var timerProvider = Provider.of<TimerProvider>(context);
     var timerProviderBreak = Provider.of<TimerProviderBreak>(context);
 
-    
     return GestureDetector(
       onHorizontalDragUpdate: (DragUpdateDetails details) {
         if (details.primaryDelta! > 0) {
@@ -108,92 +108,94 @@ class _StudyPageState extends State<StudyPage> {
             ),
             // Countdown Clock (Centered and Bigger)
             Positioned(
-              top: MediaQuery.of(context).size.height * 0.35,
-              left: () {
-                var what;
-                if(study){
-                  what = timerProvider.seconds;
-                }else{
-                  what = timerProviderBreak.seconds;
-                }
-                if(what == 0){
+                top: MediaQuery.of(context).size.height * 0.35,
+                left: () {
+                  var what;
+                  if (study) {
+                    what = timerProvider.seconds;
+                  } else {
+                    what = timerProviderBreak.seconds;
+                  }
+                  if (what == 0) {
                     resumed = false;
                     globalresume = false;
-                }
-                if (what >= 600) {
-                  return MediaQuery.of(context).size.width / 2 -
-                      (87 / 70) * MediaQuery.of(context).size.width / 5;
-                } else {
-                  return MediaQuery.of(context).size.width / 2 -
-                      (65 / 70) * MediaQuery.of(context).size.width / 5;
-                }
-              }(),
-              child: study
-                  ? Text(
-                      _formatCountdown(timerProvider.seconds),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: MediaQuery.of(context).size.width / 5,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  : Text(
-                      _formatCountdown(timerProviderBreak.seconds),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: MediaQuery.of(context).size.width / 5,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-              
-            ),
+                    Vibration.vibrate(duration: 500);
+                  }
+                  if (what >= 600) {
+                    return MediaQuery.of(context).size.width / 2 -
+                        (87 / 70) * MediaQuery.of(context).size.width / 5;
+                  } else {
+                    return MediaQuery.of(context).size.width / 2 -
+                        (65 / 70) * MediaQuery.of(context).size.width / 5;
+                  }
+                }(),
+                child: study
+                    ? Text(
+                        _formatCountdown(timerProvider.seconds),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: MediaQuery.of(context).size.width / 5,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : Text(
+                        _formatCountdown(timerProviderBreak.seconds),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: MediaQuery.of(context).size.width / 5,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
             Positioned(
-              top: MediaQuery.of(context).size.width *0.43,
-              left:MediaQuery.of(context).size.width *0.22,
-              child: Container(
-                //color: Color.fromARGB(255, 50, 210, 228), // Set the background color here
-                padding: EdgeInsets.all(13.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0), // Adjust the border radius
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Color.fromARGB(255, 158, 59, 173).withOpacity(0.1), Color.fromARGB(255, 44, 88, 185).withOpacity(0.2)],
-                  ),
-                  boxShadow:const  [
-                    BoxShadow(
-                      color: Color.fromARGB(255, 50, 210, 228), // Adjust the shadow color
-                      spreadRadius: 2,
-                      blurRadius: 10,
-                      offset: Offset(0, 3), // Adjust the shadow offset
+                top: MediaQuery.of(context).size.width * 0.43,
+                left: MediaQuery.of(context).size.width * 0.22,
+                child: Container(
+                    //color: Color.fromARGB(255, 50, 210, 228), // Set the background color here
+                    padding: EdgeInsets.all(13.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                          10.0), // Adjust the border radius
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromARGB(255, 158, 59, 173).withOpacity(0.1),
+                          Color.fromARGB(255, 44, 88, 185).withOpacity(0.2)
+                        ],
+                      ),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color.fromARGB(
+                              255, 50, 210, 228), // Adjust the shadow color
+                          spreadRadius: 2,
+                          blurRadius: 10,
+                          offset: Offset(0, 3), // Adjust the shadow offset
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child :study
-                    ? const Text(
-                        "Study Session",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    : const Text(
-                        "Break Session",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-              )
-            ),
+                    child: study
+                        ? const Text(
+                            "Study Session",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : const Text(
+                            "Break Session",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ))),
             // ... existing code ...
 
             // Pause Button
             Positioned(
               top: MediaQuery.of(context).size.height * 0.58,
-              left: MediaQuery.of(context).size.width *0.2,
+              left: MediaQuery.of(context).size.width * 0.2,
               child: ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -249,10 +251,10 @@ class _StudyPageState extends State<StudyPage> {
               child: ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    if(study){
-                      timerProvider.setSeconds(firstbox*60);
-                    }else{
-                      timerProviderBreak.setSeconds(firstbox*60);
+                    if (study) {
+                      timerProvider.setSeconds(firstbox * 60);
+                    } else {
+                      timerProviderBreak.setSeconds(firstbox * 60);
                     }
                   });
                 },
@@ -273,10 +275,10 @@ class _StudyPageState extends State<StudyPage> {
               child: ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    if(study){
-                      timerProvider.setSeconds(secondbox*60);
-                    }else{
-                      timerProviderBreak.setSeconds(secondbox*60);
+                    if (study) {
+                      timerProvider.setSeconds(secondbox * 60);
+                    } else {
+                      timerProviderBreak.setSeconds(secondbox * 60);
                     }
                   });
                 },
@@ -293,14 +295,14 @@ class _StudyPageState extends State<StudyPage> {
             ),
             Positioned(
               top: MediaQuery.of(context).size.height * 0.13,
-              left: MediaQuery.of(context).size.width *5/9,
+              left: MediaQuery.of(context).size.width * 5 / 9,
               child: ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    if(study){
-                      timerProvider.setSeconds(thirdbox*60);
-                    }else{
-                      timerProviderBreak.setSeconds(thirdbox*60);
+                    if (study) {
+                      timerProvider.setSeconds(thirdbox * 60);
+                    } else {
+                      timerProviderBreak.setSeconds(thirdbox * 60);
                     }
                   });
                 },
@@ -317,46 +319,43 @@ class _StudyPageState extends State<StudyPage> {
             ),
             Positioned(
               top: MediaQuery.of(context).size.height * 0.66,
-              left: MediaQuery.of(context).size.width *0.39,
+              left: MediaQuery.of(context).size.width * 0.39,
               child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    resumed = false;
-                    globalresume = false;
-                    if(study){
-                      timerProvider.pauseTimer();
-                      study = false;
-                      globalstudy = false;
-                    }else{
-                      timerProviderBreak.pauseTimer();
-                      study = true;
-                      globalstudy = true;
-                    }
-
-
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                ),
-                child: study
-                  ? const Text(
-                      'Break',
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    )
-                  : const Text(
-                      'Study',
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    )
-              ),
+                  onPressed: () {
+                    setState(() {
+                      resumed = false;
+                      globalresume = false;
+                      if (study) {
+                        timerProvider.pauseTimer();
+                        study = false;
+                        globalstudy = false;
+                      } else {
+                        timerProviderBreak.pauseTimer();
+                        study = true;
+                        globalstudy = true;
+                      }
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(16),
+                  ),
+                  child: study
+                      ? const Text(
+                          'Break',
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        )
+                      : const Text(
+                          'Study',
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        )),
             ),
             Positioned(
               top: MediaQuery.of(context).size.height * 0.13,
-              left: MediaQuery.of(context).size.width *7/9,
+              left: MediaQuery.of(context).size.width * 7 / 9,
               child: ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -375,7 +374,7 @@ class _StudyPageState extends State<StudyPage> {
               ),
             ),
             Positioned.fill(
-              child:Visibility(
+              child: Visibility(
                 visible: isOverlayVisible2,
                 child: ScheduleAdder(
                   onSave: () =>{
@@ -414,6 +413,7 @@ class _StudyPageState extends State<StudyPage> {
       ),
     );
   }
+
   String _formatCountdown(int countdownSeconds) {
     int minutes = countdownSeconds ~/ 60;
     int seconds = countdownSeconds % 60;
@@ -429,7 +429,3 @@ class _StudyPageState extends State<StudyPage> {
 
   // ... rest of the class remains unchanged ...
 }
-
-
-
-

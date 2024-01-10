@@ -1,10 +1,10 @@
 name: aay_application
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.1.4 <4.0.0'
+  sdk: ">=3.1.4 <4.0.0"
 
 dependencies:
   flutter:
@@ -12,7 +12,7 @@ dependencies:
   firebase_core: ^2.24.2
   cloud_firestore: ^4.13.6
   device_info: ^2.0.3
-  provider: ^5.0.0
+  provider: ^5.0.0  
   app_settings: ^5.1.1
   url_launcher: ^6.0.9
   android_intent: ^2.0.2
@@ -22,7 +22,7 @@ dependencies:
   audioplayers: ^1.1.0
   
 
-  
+  vibration: ^1.8.4
 
 dev_dependencies:
   flutter_test:
