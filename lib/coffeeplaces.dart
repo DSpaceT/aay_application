@@ -1,11 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'widgets/overlay_function.dart';
 import 'widgets/custom_appbar.dart';
 import 'utils/device_id.dart';
 import 'widgets/places_list.dart';
 import 'package:tuple/tuple.dart';
-
 
 class PlacesPage extends StatefulWidget {
   const PlacesPage({Key? key}) : super(key: key);
@@ -20,10 +18,30 @@ class _PlacesPageState extends State<PlacesPage> {
   late String userId; // User ID
 
   List<Place> placesList = [
-    Place(name: 'starbucks', imageAsset: 'assets/places/Starbucks_place.png', isCompleted: false,location: Tuple2(37, -122),),
-    Place(name: 'coffee island', imageAsset: 'assets/places/Coffee_island_place.png', isCompleted: false,location: Tuple2(40.7128, -74.0060),),
-    Place(name: 'Mickel', imageAsset: 'assets/places/Mickel_place.png', isCompleted: false,location: Tuple2(100, 234),),
-    Place(name: 'BooksBeans', imageAsset: 'assets/places/BooksBeans_place.png', isCompleted: false,location: Tuple2(100, 234),),
+    Place(
+      name: 'starbucks',
+      imageAsset: 'assets/places/Starbucks_place.png',
+      isCompleted: false,
+      location: Tuple2(37, -122),
+    ),
+    Place(
+      name: 'coffee island',
+      imageAsset: 'assets/places/Coffee_island_place.png',
+      isCompleted: false,
+      location: Tuple2(40.7128, -74.0060),
+    ),
+    Place(
+      name: 'Mickel',
+      imageAsset: 'assets/places/Mickel_place.png',
+      isCompleted: false,
+      location: Tuple2(100, 234),
+    ),
+    Place(
+      name: 'BooksBeans',
+      imageAsset: 'assets/places/BooksBeans_place.png',
+      isCompleted: false,
+      location: Tuple2(100, 234),
+    ),
     // Add more Place instances as needed
   ];
 
@@ -38,6 +56,7 @@ class _PlacesPageState extends State<PlacesPage> {
       isOverlayVisible = false;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
@@ -52,8 +71,7 @@ class _PlacesPageState extends State<PlacesPage> {
     );
   }
 
-  Widget _buildContent(){
-
+  Widget _buildContent() {
     return GestureDetector(
       onHorizontalDragUpdate: (DragUpdateDetails details) {
         // Handle horizontal drag updates if needed
@@ -76,7 +94,6 @@ class _PlacesPageState extends State<PlacesPage> {
               left: 0,
               right: 0,
               child: CustomAppBar(
-                title: 'Places Page',
                 showSettings: false,
                 showProfile: true,
                 showInfo: true,
@@ -108,6 +125,3 @@ class _PlacesPageState extends State<PlacesPage> {
     userId = await DeviceUtils.getDeviceId();
   }
 }
-
-
-

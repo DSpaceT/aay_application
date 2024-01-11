@@ -23,11 +23,16 @@ class _ProfilePageState extends State<ProfilePage> {
   bool isOverlayVisiblecoupon = false;
 
   List<Reward> rewardsList = [
-  Reward(name: 'Mickel coupon', imageAsset: 'assets/coupons/Coupon_mickel.png'),
-  Reward(name: 'Mickel coupon 2', imageAsset: 'assets/coupons/Coupon_mickel_2.png'),
-  Reward(name: 'Starbucks coupon', imageAsset: 'assets/coupons/Coupon_starbucks.png'),
-  // Add more Place instances as needed
-];
+    Reward(
+        name: 'Mickel coupon', imageAsset: 'assets/coupons/Coupon_mickel.png'),
+    Reward(
+        name: 'Mickel coupon 2',
+        imageAsset: 'assets/coupons/Coupon_mickel_2.png'),
+    Reward(
+        name: 'Starbucks coupon',
+        imageAsset: 'assets/coupons/Coupon_starbucks.png'),
+    // Add more Place instances as needed
+  ];
 
   void showOverlay() {
     setState(() {
@@ -52,7 +57,6 @@ class _ProfilePageState extends State<ProfilePage> {
       isOverlayVisiblecoupon = false;
     });
   }
-  
 
   @override
   @override
@@ -68,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
       },
     );
   }
- 
+
   Widget _buildContent() {
     return Scaffold(
       body: Stack(
@@ -88,7 +92,6 @@ class _ProfilePageState extends State<ProfilePage> {
             left: 0,
             right: 0,
             child: CustomAppBar(
-              title: 'Profile Page',
               showSettings: true,
               showProfile: false,
               showInfo: true,
@@ -100,132 +103,136 @@ class _ProfilePageState extends State<ProfilePage> {
           // For example, you can add two containers with images and text in the center:
           Center(
             child: rewards
-            ? Stack(
-              children: [
-                Positioned(
-                  top: MediaQuery.of(context).size.height*0.23,
-                  right: MediaQuery.of(context).size.width*0.38,
-                  child:ElevatedButton(
-                    child: Text("rewards"),
-                    onPressed: () {
-                      setState(() {
-                        rewards = !rewards;
-                        globalrewards = !globalrewards;
-                      });
-
-                    },
-                    )
-                ),
-                // First container
-                Positioned(
-                  top: MediaQuery.of(context).size.height*0.27,
-                  right: MediaQuery.of(context).size.width*0.12,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/profile_images/Todo_image.png'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    padding: EdgeInsets.all(25),
-                    margin: EdgeInsets.all(25),
-                    width: 250, // Set the width as needed
-                    height: 250, // Set the height as needed
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 40), // Adjust top padding
-                        child: Text(
-                          '${taskscompleted}',
-                          style: TextStyle(color: Colors.white, fontSize: 70),
+                ? Stack(
+                    children: [
+                      Positioned(
+                          top: MediaQuery.of(context).size.height * 0.23,
+                          right: MediaQuery.of(context).size.width * 0.38,
+                          child: ElevatedButton(
+                            child: Text("rewards"),
+                            onPressed: () {
+                              setState(() {
+                                rewards = !rewards;
+                                globalrewards = !globalrewards;
+                              });
+                            },
+                          )),
+                      // First container
+                      Positioned(
+                        top: MediaQuery.of(context).size.height * 0.27,
+                        right: MediaQuery.of(context).size.width * 0.12,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/profile_images/Todo_image.png'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          padding: EdgeInsets.all(25),
+                          margin: EdgeInsets.all(25),
+                          width: 250, // Set the width as needed
+                          height: 250, // Set the height as needed
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 40), // Adjust top padding
+                              child: Text(
+                                '${taskscompleted}',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 70),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-                // Second container
-                Positioned(
-                  top: MediaQuery.of(context).size.height*0.6,
-                  right: MediaQuery.of(context).size.width*0.12,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/profile_images/Points_image.png'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    padding: EdgeInsets.all(25),
-                    margin: EdgeInsets.all(25),
-                    width: 250, // Set the width as needed
-                    height: 250, // Set the height as needed
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 40), // Adjust top padding
-                        child: Text(
-                          '${points}',
-                          style: TextStyle(color: Colors.white, fontSize: 70),
+                      // Second container
+                      Positioned(
+                        top: MediaQuery.of(context).size.height * 0.6,
+                        right: MediaQuery.of(context).size.width * 0.12,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/profile_images/Points_image.png'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          padding: EdgeInsets.all(25),
+                          margin: EdgeInsets.all(25),
+                          width: 250, // Set the width as needed
+                          height: 250, // Set the height as needed
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 40), // Adjust top padding
+                              child: Text(
+                                '${points}',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 70),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
+                    ],
+                  )
+                : Stack(children: [
+                    ListView.builder(
+                      itemCount: 1 + rewardsList.length,
+                      padding: EdgeInsets.only(top: 150.0, left: 10),
+                      itemExtent: 125.0,
+                      itemBuilder: (context, index) {
+                        if (index == 0) {
+                          return SizedBox.shrink();
+                        }
+                        return rewardsList[index - 1];
+                      },
                     ),
-                  ),
-                ),
-              ],
-            )
-            :Stack(
-              children:[
-                ListView.builder(
-                  itemCount: 1 + rewardsList.length,
-                  padding: EdgeInsets.only(top: 150.0,left:10),
-                  itemExtent: 125.0,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return SizedBox.shrink();
-                    }
-                    return rewardsList[index - 1];
-                  },
-                ),
-                Positioned(
-                  top: MediaQuery.of(context).size.height*0.23,
-                  right: MediaQuery.of(context).size.width*0.38,
-                  child:ElevatedButton(
-                    child: Text("stats"),
-                    onPressed: () {
-                      print("hello world");
-                      setState(() {
-                        rewards = !rewards;
-                        globalrewards = !globalrewards;
-                      });
-
-                    },
-                ),
-                ),
-              ]
-            ),
+                    Positioned(
+                      top: MediaQuery.of(context).size.height * 0.23,
+                      right: MediaQuery.of(context).size.width * 0.38,
+                      child: ElevatedButton(
+                        child: Text("stats"),
+                        onPressed: () {
+                          print("hello world");
+                          setState(() {
+                            rewards = !rewards;
+                            globalrewards = !globalrewards;
+                          });
+                        },
+                      ),
+                    ),
+                  ]),
           ),
           Positioned.fill(
-              child: Visibility(
-                visible: isOverlayVisible,
-                child: InfoOverlay(
-                  onClose: hideOverlay,
-                  overlayImage: 'assets/overlays/Profile_info_overlay.png',
-                ),
+            child: Visibility(
+              visible: isOverlayVisible,
+              child: InfoOverlay(
+                onClose: hideOverlay,
+                overlayImage: 'assets/overlays/Profile_info_overlay.png',
               ),
             ),
+          ),
         ],
       ),
     );
   }
+
   Future<void> _initializeData() async {
     userId = await DeviceUtils.getDeviceId();
     points = await _fetchInitialPoints();
     taskscompleted = await _fetchInitialTasksCompleted();
   }
+
   Future<int> _fetchInitialPoints() async {
     var pointsgetter;
     if (userId.isNotEmpty) {
-      DocumentSnapshot<Map<String, dynamic>> userSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .get();
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .get();
 
       if (userSnapshot.exists) {
         Map<String, dynamic>? userData = userSnapshot.data();
@@ -239,15 +246,16 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     }
     return pointsgetter;
-
   }
-    Future<int> _fetchInitialTasksCompleted() async {
+
+  Future<int> _fetchInitialTasksCompleted() async {
     var tasksgetter;
     if (userId.isNotEmpty) {
-      DocumentSnapshot<Map<String, dynamic>> userSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .get();
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .get();
 
       if (userSnapshot.exists) {
         Map<String, dynamic>? userData = userSnapshot.data();
@@ -261,8 +269,5 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     }
     return tasksgetter;
-
   }
-
-
 }

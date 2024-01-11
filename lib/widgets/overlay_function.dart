@@ -38,8 +38,6 @@ class InfoOverlay extends StatelessWidget {
   }
 }
 
-
-
 class MyButton extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
@@ -59,7 +57,8 @@ class _MyButtonState extends State<MyButton> {
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: widget.onPressed,
-      color: Theme.of(context).primaryColor,
+      color: Color.fromARGB(255, 22, 142, 223),
+      textColor: Color.fromARGB(255, 255, 222, 124),
       child: Text(widget.text),
     );
   }
@@ -89,52 +88,57 @@ class _DialogBoxState extends State<DialogBox> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Color.fromARGB(255, 237, 70, 196),
+      backgroundColor: Color.fromARGB(255, 197, 27, 155),
       content: Container(
-        height: 350,
+        height: MediaQuery.of(context).size.height * 0.5,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // get user input
             TextField(
               controller: widget.controller,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: const Color.fromARGB(255, 224, 170, 8),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
                 hintText: "Task Title",
               ),
             ),
 
             Container(
               height: 243,
-              child : TextField(
+              child: TextField(
                 controller: widget.controller2,
-                maxLines: null,  // Allow unlimited lines
-                keyboardType: TextInputType.multiline,  // Enable multiline input
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                maxLines: null, // Allow unlimited lines
+                keyboardType: TextInputType.multiline, // Enable multiline input
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 224, 170, 8),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20)),
                   hintText: "Add new task",
                 ),
               ),
             ),
 
-
             // buttons -> save + cancel
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // save button
                 MyButton(
-                  text: "Save",
-                  onPressed:()=>{
-                    widget.onSave(),
-                  }),
+                    text: "Save",
+                    onPressed: () => {
+                          widget.onSave(),
+                        }),
 
                 const SizedBox(width: 8),
 
                 // cancel button
                 MyButton(
                   text: "Cancel",
-                   onPressed: ()=>{
+                  onPressed: () => {
                     widget.onCancel(),
                     widget.controller.clear(),
                     widget.controller2.clear(),
@@ -148,4 +152,3 @@ class _DialogBoxState extends State<DialogBox> {
     );
   }
 }
-

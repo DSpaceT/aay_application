@@ -27,9 +27,9 @@ class _StudyPageState extends State<StudyPage> {
   bool resumed = globalresume;
   int selectedMinutes = 0;
 
-  int firstbox = 5;
-  int secondbox = 10;
-  int thirdbox = 15;
+  int firstbox = 10;
+  int secondbox = 30;
+  int thirdbox = 45;
 
   void showOverlay() {
     setState(() {
@@ -69,7 +69,7 @@ class _StudyPageState extends State<StudyPage> {
       onTapUp: (TapUpDetails details) {
         // Get the position of the tap
         double tapPosition = details.globalPosition.dy;
-        
+
         // Get the screen height
         double screenHeight = MediaQuery.of(context).size.height;
 
@@ -99,7 +99,6 @@ class _StudyPageState extends State<StudyPage> {
               left: 0,
               right: 0,
               child: CustomAppBar(
-                title: 'Another Page',
                 showSettings: true,
                 showProfile: true,
                 showInfo: true,
@@ -133,7 +132,15 @@ class _StudyPageState extends State<StudyPage> {
                     ? Text(
                         _formatCountdown(timerProvider.seconds),
                         style: TextStyle(
-                          color: Colors.white,
+                          foreground: Paint()
+                            ..shader = const LinearGradient(
+                              colors: [
+                                Color.fromARGB(255, 0, 255, 179),
+                                Color.fromARGB(255, 0, 255, 191),
+                                Color.fromARGB(255, 0, 174, 243),
+                              ],
+                            ).createShader(const Rect.fromLTWH(
+                                100.0, 200.0, 200.0, 100.0)),
                           fontSize: MediaQuery.of(context).size.width / 5,
                           fontWeight: FontWeight.bold,
                         ),
@@ -141,7 +148,15 @@ class _StudyPageState extends State<StudyPage> {
                     : Text(
                         _formatCountdown(timerProviderBreak.seconds),
                         style: TextStyle(
-                          color: Colors.white,
+                          foreground: Paint()
+                            ..shader = const LinearGradient(
+                              colors: [
+                                Color.fromARGB(255, 0, 255, 179),
+                                Color.fromARGB(255, 0, 255, 191),
+                                Color.fromARGB(255, 0, 174, 243),
+                              ],
+                            ).createShader(const Rect.fromLTWH(
+                                100.0, 200.0, 200.0, 100.0)),
                           fontSize: MediaQuery.of(context).size.width / 5,
                           fontWeight: FontWeight.bold,
                         ),
@@ -195,53 +210,51 @@ class _StudyPageState extends State<StudyPage> {
             // Pause Button
             Positioned(
               top: MediaQuery.of(context).size.height * 0.58,
-              left: MediaQuery.of(context).size.width * 0.2,
+              left: MediaQuery.of(context).size.width * 0.39,
               child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    if(resumed){
-                      resumed = false;
-                      globalresume = false;
-                      if(study){
-                        timerProvider.pauseTimer();
-                      }else{
-                        timerProviderBreak.pauseTimer();
+                  onPressed: () {
+                    setState(() {
+                      if (resumed) {
+                        resumed = false;
+                        globalresume = false;
+                        if (study) {
+                          timerProvider.pauseTimer();
+                        } else {
+                          timerProviderBreak.pauseTimer();
+                        }
+                      } else {
+                        resumed = true;
+                        globalresume = true;
+                        if (study) {
+                          timerProvider.resumeTimer();
+                        } else {
+                          timerProviderBreak.resumeTimer();
+                        }
                       }
-                    }else{
-                      resumed = true;
-                      globalresume = true;
-                      if(study){
-                        timerProvider.resumeTimer();
-                      }else{
-                        timerProviderBreak.resumeTimer();
-                      }
-                    }
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(16),
-                ),
-                child: Container(
-                  width: 200, // Adjust the width as needed
-                  height: 20,
+                    });
+                  },
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(16),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50))),
+                      backgroundColor: MaterialStateProperty.all(
+                          Color.fromARGB(255, 154, 25, 177))),
                   child: Center(
-                    child :resumed
-                      ? const Text(
-                        'Pause',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      )
-                    : const Text(
-                        'Resume',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      )
-                  )
-
-                )
-              ),
+                      child: resumed
+                          ? const Center(
+                              child: Icon(
+                                Icons.pause,
+                                size: 50,
+                                color: Color.fromARGB(255, 90, 255, 205),
+                              ),
+                            )
+                          : const Center(
+                              child: Icon(
+                                Icons.play_arrow,
+                                size: 50,
+                                color: Color.fromARGB(255, 90, 255, 205),
+                              ),
+                            ))),
             ),
 
             // Set 5 Minutes Button
@@ -258,14 +271,15 @@ class _StudyPageState extends State<StudyPage> {
                     }
                   });
                 },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                ),
+                style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(16),
+                    padding:
+                        MaterialStateProperty.all(const EdgeInsets.all(16)),
+                    backgroundColor: MaterialStateProperty.all(
+                        const Color.fromARGB(255, 154, 25, 177))),
                 child: Text(
                   '${firstbox}m',
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
+                  style: const TextStyle(fontSize: 15, color: Colors.white),
                 ),
               ),
             ),
@@ -282,14 +296,15 @@ class _StudyPageState extends State<StudyPage> {
                     }
                   });
                 },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                ),
+                style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(16),
+                    padding:
+                        MaterialStateProperty.all(const EdgeInsets.all(16)),
+                    backgroundColor: MaterialStateProperty.all(
+                        const Color.fromARGB(255, 154, 25, 177))),
                 child: Text(
                   '${secondbox}m',
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
+                  style: const TextStyle(fontSize: 15, color: Colors.white),
                 ),
               ),
             ),
@@ -306,14 +321,15 @@ class _StudyPageState extends State<StudyPage> {
                     }
                   });
                 },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                ),
+                style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(16),
+                    padding:
+                        MaterialStateProperty.all(const EdgeInsets.all(16)),
+                    backgroundColor: MaterialStateProperty.all(
+                        const Color.fromARGB(255, 154, 25, 177))),
                 child: Text(
                   '${thirdbox}m',
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
+                  style: const TextStyle(fontSize: 15, color: Colors.white),
                 ),
               ),
             ),
@@ -336,21 +352,20 @@ class _StudyPageState extends State<StudyPage> {
                       }
                     });
                   },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(16),
-                  ),
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(16),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50))),
+                      backgroundColor: MaterialStateProperty.all(
+                          const Color.fromARGB(255, 154, 25, 177))),
                   child: study
                       ? const Text(
                           'Break',
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
+                          style: TextStyle(fontSize: 20, color: Colors.white),
                         )
                       : const Text(
                           'Study',
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
+                          style: TextStyle(fontSize: 20, color: Colors.white),
                         )),
             ),
             Positioned(
@@ -362,14 +377,15 @@ class _StudyPageState extends State<StudyPage> {
                     isOverlayVisible2 = true;
                   });
                 },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                ),
+                style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(16),
+                    padding:
+                        MaterialStateProperty.all(const EdgeInsets.all(16)),
+                    backgroundColor: MaterialStateProperty.all(
+                        const Color.fromARGB(255, 0, 153, 255))),
                 child: const Text(
                   '>>',
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
+                  style: TextStyle(fontSize: 15, color: Colors.white),
                 ),
               ),
             ),
@@ -377,22 +393,21 @@ class _StudyPageState extends State<StudyPage> {
               child: Visibility(
                 visible: isOverlayVisible2,
                 child: ScheduleAdder(
-                  onSave: () =>{
+                  onSave: () => {
                     //hideOverlay_here(),
                     setState(() {
                       isOverlayVisible2 = false;
-                      if(study){
-                        timerProvider.setSeconds(selectedMinutes*60);
-                      }else{
-                        timerProviderBreak.setSeconds(selectedMinutes*60);
+                      if (study) {
+                        timerProvider.setSeconds(selectedMinutes * 60);
+                      } else {
+                        timerProviderBreak.setSeconds(selectedMinutes * 60);
                       }
                     }),
-                    
                   },
                   onCancel: hideOverlay_here,
                   onClose: hideOverlay_here,
                   onMinutesSelected: (minutes) {
-                    setState(() {    
+                    setState(() {
                       selectedMinutes = minutes;
                     });
                   },
@@ -423,6 +438,7 @@ class _StudyPageState extends State<StudyPage> {
   void _navigateToTasksPage(BuildContext context) {
     Navigator.pushNamed(context, '/taskspage');
   }
+
   void _navigateToMusicPage(BuildContext context) {
     Navigator.pushNamed(context, '/musicpage');
   }

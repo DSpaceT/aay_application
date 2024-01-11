@@ -1,9 +1,7 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'widgets/audio_list.dart';
+import 'widgets/custom_appbar.dart';
 
 bool globalstarted = false;
 bool globalisPlaying = false;
@@ -11,7 +9,6 @@ AudioPlayer globalplayer = AudioPlayer();
 String playingnow = "false";
 String playingprev = "false";
 bool globalchange = false;
-
 
 class MusicPage extends StatefulWidget {
   const MusicPage({super.key});
@@ -44,13 +41,12 @@ class _MusicPageState extends State<MusicPage> {
         },
       ),
       AudioItem(
-        player:player,
-        assettoplay: 'audio/Inception.mp3',
-        onPressed: (){
-          playingnow = "Inception";
-          onpressed();
-        }
-        ),
+          player: player,
+          assettoplay: 'audio/Inception.mp3',
+          onPressed: () {
+            playingnow = "Inception";
+            onpressed();
+          }),
     ];
     //globalwidgets = audioItems;
 
@@ -74,7 +70,7 @@ class _MusicPageState extends State<MusicPage> {
       globalisPlaying = false;
       playingprev = playingnow;
       player.play(AssetSource('audio/${playingnow}.mp3'));
-    } else if(playingprev!=playingnow){
+    } else if (playingprev != playingnow) {
       globalchange = true;
       print("stopping one start other");
       player.pause();
@@ -82,8 +78,7 @@ class _MusicPageState extends State<MusicPage> {
       player.play(AssetSource('audio/${playingnow}.mp3'));
       playingprev = playingnow;
       isPlaying = !isPlaying;
-    }
-    else {
+    } else {
       if (isPlaying) {
         print("pausing");
         player.pause();
@@ -98,12 +93,26 @@ class _MusicPageState extends State<MusicPage> {
     });
   }
 
+  void onButtonClick() {
+    if (isPlaying) {
+      print("pausing");
+      player.pause();
+    } else {
+      print("resuming");
+      player.resume();
+    }
+    setState(() {
+      isPlaying = !isPlaying;
+      globalisPlaying = !globalisPlaying;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("daboudai"),
-      ),
+      // appBar: AppBar(
+      //   title: Text("daboudai"),
+      // ),
       body: Stack(
         children: [
           Container(
@@ -114,27 +123,81 @@ class _MusicPageState extends State<MusicPage> {
               ),
             ),
           ),
-        Positioned(
-          top: MediaQuery.of(context).size.height * 0.2,
-          left: MediaQuery.of(context).size.width * 0.05,
-          child: Container(
-            width: 350,
-            padding: EdgeInsets.all(8.0),  // Adjust padding as needed
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 226, 106, 178),  // Set container color to purple
-              borderRadius: BorderRadius.circular(8.0),  // Optional: Add rounded corners
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: CustomAppBar(
+              showSettings: false,
+              showProfile: false,
+              showInfo: false,
+              infoCallback: null,
             ),
-            child: Text(
-              "Playing now :"+playingnow,
-              style: TextStyle(
-                color: Color.fromARGB(255, 62, 17, 110),        // Set text color to pink
-                fontSize: 24,              // Set font size to 24
-                fontWeight: FontWeight.bold,  // Make the text bold
+          ),
+          Positioned(
+            bottom: 20,
+            left: MediaQuery.of(context).size.width * 0.05,
+            child: Container(
+              width: 350,
+              padding: EdgeInsets.all(8.0), // Adjust padding as needed
+              decoration: BoxDecoration(
+                color: Color.fromARGB(
+                    255, 129, 16, 235), // Set container color to purple
+                borderRadius:
+                    BorderRadius.circular(8.0), // Optional: Add rounded corners
+              ),
+              child: Text(
+                "Playing now :" + playingnow,
+                style: TextStyle(
+                  color: Color.fromARGB(
+                      255, 236, 178, 18), // Set text color to pink
+                  fontSize: 24, // Set font size to 24
+                  fontWeight: FontWeight.bold, // Make the text bold
+                ),
               ),
             ),
           ),
-        ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.7,
+            left: MediaQuery.of(context).size.width * 0.39,
+            child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    if (isPlaying) {
+                      print("pausing");
+                      player.pause();
+                    } else {
+                      print("resuming");
+                      player.resume();
+                    }
 
+                    isPlaying = !isPlaying;
+                    globalisPlaying = !globalisPlaying;
+                  });
+                },
+                style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(16),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50))),
+                    backgroundColor: MaterialStateProperty.all(
+                        Color.fromARGB(255, 154, 25, 177))),
+                child: Center(
+                    child: isPlaying
+                        ? const Center(
+                            child: Icon(
+                              Icons.pause,
+                              size: 50,
+                              color: Color.fromARGB(255, 90, 255, 205),
+                            ),
+                          )
+                        : const Center(
+                            child: Icon(
+                              Icons.play_arrow,
+                              size: 50,
+                              color: Color.fromARGB(255, 90, 255, 205),
+                            ),
+                          ))),
+          ),
           ListView.builder(
             itemCount: 1 + audioItems.length,
             padding: EdgeInsets.only(top: 200.0),

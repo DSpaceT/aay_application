@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget {
-  final String title;
   final bool showSettings;
   final bool showProfile;
   final bool showInfo;
@@ -9,7 +8,6 @@ class CustomAppBar extends StatelessWidget {
 
   CustomAppBar({
     Key? key,
-    required this.title,
     this.showSettings = true,
     this.showProfile = true,
     this.showInfo = true,
@@ -27,8 +25,8 @@ class CustomAppBar extends StatelessWidget {
     return Container(
       height: appBarHeight,
       child: AppBar(
-        title: Text(title),
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color.fromARGB(94, 92, 32, 233),
+        elevation: 20,
         actions: [
           if (showSettings)
             IconButton(
