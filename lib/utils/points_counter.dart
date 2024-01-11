@@ -62,6 +62,7 @@ class PointsCounter with ChangeNotifier {
   }
 
   void resumeTimer() {
+    _fetchInitialPoints();
     _isPaused = false;
     _timer.cancel(); // Cancel the existing timer
     _timer = Timer.periodic(Duration(seconds: 1), _updateTimer); // Start a new timer

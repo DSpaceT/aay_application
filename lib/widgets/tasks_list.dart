@@ -205,7 +205,7 @@ class _TasksListState extends State<TasksList> {
     }
   }
   Future<int> _fetchInitialTasksCompleted() async {
-    var tasksgetter;
+    var tasksgetter = 0;
     if (userId.isNotEmpty) {
       DocumentSnapshot<Map<String, dynamic>> userSnapshot = await FirebaseFirestore.instance
           .collection('users')
