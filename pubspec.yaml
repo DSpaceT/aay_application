@@ -63,4 +63,5 @@ flutter:
     - assets/coupons/Coupon_starbucks.png
     - assets/coupon_codes/Coupon_code_1.png
     - assets/coupon_codes/Coupon_code_2.png
+    - assets/coupon_codes/Notenoughpoints.png
   uses-material-design: true
