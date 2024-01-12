@@ -99,8 +99,8 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
 
             Positioned(
-              top: 206,
-              left: 30,
+              top: MediaQuery.of(context).size.height * 0.3,
+              left: MediaQuery.of(context).size.width * 0.1,
               right: 190,
               height: 35,
               child: Container(
@@ -118,10 +118,10 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             Positioned(
-              top: 206,
-              width: 80,
-              height: 35,
-              left: 250,
+              top: MediaQuery.of(context).size.height * 0.3,
+              width: MediaQuery.of(context).size.width * 0.2,
+              height: MediaQuery.of(context).size.height * 0.045,
+              left: MediaQuery.of(context).size.width * 0.64,
               child: ElevatedButton(
                 onPressed: toggleSuppressPhoneCalls,
                 child: Container(),
@@ -129,8 +129,8 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             AnimatedPositioned(
               duration: Duration(milliseconds: 300),
-              top: 209,
-              left: suppressPhoneCalls ? 297.0 : 255.0,
+              top: MediaQuery.of(context).size.height * 0.303,
+              left: suppressPhoneCalls ? MediaQuery.of(context).size.width * 0.75 : MediaQuery.of(context).size.width * 0.65,
               child: GestureDetector(
                 onTap: () {
                   // Handle the tap here, e.g., toggle suppressPhoneCalls

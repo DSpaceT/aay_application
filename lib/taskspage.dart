@@ -55,10 +55,6 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
-  // Future<void> _initializeData() async {
-  //   userId = await DeviceUtils.getDeviceId();
-  //   tasks = await _getAllTasksFromFirestore();
-  // }
 
   Widget _buildContent() {
     return Scaffold(
@@ -79,8 +75,8 @@ class _TasksPageState extends State<TasksPage> {
               ),
             ),
             Positioned(
-              top: 100,
-              left: 20,
+              top: MediaQuery.of(context).size.height * 0.12,
+              left: MediaQuery.of(context).size.width * 0.05,
               right: 20,
               bottom: 200,
               child: TasksList(
@@ -90,17 +86,18 @@ class _TasksPageState extends State<TasksPage> {
               ),
             ),
             Positioned(
-                top: 540,
-                left: 165,
-                right: 165,
-                bottom: 280,
-                child: FloatingActionButton(
-                    backgroundColor: Colors.green,
-                    onPressed: () {
-                      // Open overlay when the "Add Task" button is pressed
-                      showOverlay_here();
-                    },
-                    child: const Icon(Icons.add))),
+              top: MediaQuery.of(context).size.height * 0.73,
+              left: MediaQuery.of(context).size.width * 0.05,
+              right: 20,
+              bottom: 170,
+              child: ElevatedButton(
+                  onPressed: () {
+                    // Open overlay when the "Add Task" button is pressed
+                   showOverlay_here();
+                  },
+                  child: const Text('Add Task'),
+                )
+            ),
             Visibility(
               visible: isOverlayVisible,
               child: DialogBox(

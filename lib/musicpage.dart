@@ -18,22 +18,35 @@ class MusicPage extends StatefulWidget {
 }
 
 class _MusicPageState extends State<MusicPage> {
-  late AudioPlayer player;
+  //late AudioPlayer player;
   late bool isPlaying;
   late bool started;
   late List<AudioItem> audioItems;
+
+  Future<void> asyncfuncforaudio() async {
+    // Pause the player and wait for it to complete
+    await globalplayer.pause();
+
+    // Stop the player and wait for it to complete
+    await globalplayer.stop();
+
+    // Play the new audio file and wait for it to complete
+    await globalplayer.play(AssetSource('audio/$playingnow.mp3'));
+
+    // Other code in your function
+  }
 
   @override
   void initState() {
     super.initState();
 
-    player = globalplayer;
+    //player = globalplayer;
     isPlaying = globalisPlaying;
     started = globalstarted;
 
     audioItems = [
       AudioItem(
-        player: player,
+        player: globalplayer,
         assettoplay: 'audio/Music_is_Love.mp3',
         onPressed: () {
           playingnow = "Music_is_Love";
@@ -41,7 +54,7 @@ class _MusicPageState extends State<MusicPage> {
         },
       ),
       AudioItem(
-          player: player,
+          player: globalplayer,
           assettoplay: 'audio/Inception.mp3',
           onPressed: () {
             playingnow = "Inception";
@@ -50,56 +63,67 @@ class _MusicPageState extends State<MusicPage> {
     ];
     //globalwidgets = audioItems;
 
-    player.onPlayerStateChanged.listen((PlayerState state) {
+    globalplayer.onPlayerStateChanged.listen((PlayerState state) {
       if (state == PlayerState.completed) {
         // Song has completed, restart it
+        globalplayer.stop();
         setState(() {
           isPlaying = false;
           globalisPlaying = false;
+          started = false;
+          globalstarted = false;
         });
-        player.seek(Duration.zero);
+        globalplayer.seek(Duration.zero);
       }
     });
   }
 
   void onpressed() {
+    bool continuewith = false;
     if (!started) {
       started = true;
       globalstarted = true;
-      isPlaying = false;
-      globalisPlaying = false;
       playingprev = playingnow;
-      player.play(AssetSource('audio/${playingnow}.mp3'));
+      globalplayer.play(AssetSource('audio/${playingnow}.mp3'));
     } else if (playingprev != playingnow) {
+      continuewith = true;
       globalchange = true;
       print("stopping one start other");
-      player.pause();
-      player.stop();
-      player.play(AssetSource('audio/${playingnow}.mp3'));
+      asyncfuncforaudio();
       playingprev = playingnow;
-      isPlaying = !isPlaying;
+
     } else {
+      print("wtf");
       if (isPlaying) {
         print("pausing");
-        player.pause();
+        globalplayer.pause();
       } else {
         print("resuming");
-        player.resume();
+        globalplayer.resume();
       }
     }
-    setState(() {
-      isPlaying = !isPlaying;
-      globalisPlaying = !globalisPlaying;
-    });
+    if(!continuewith){
+      setState(() {
+        isPlaying = !isPlaying;
+        globalisPlaying = !globalisPlaying;
+      });
+    }else{
+      setState(() {
+        isPlaying = true;
+        globalisPlaying = true;
+      });
+    }
   }
 
   void onButtonClick() {
     if (isPlaying) {
       print("pausing");
-      player.pause();
+      globalplayer.pause();
+      //player.pause();
     } else {
       print("resuming");
-      player.resume();
+      //player.resume();
+      globalplayer.resume();
     }
     setState(() {
       isPlaying = !isPlaying;
@@ -121,17 +145,6 @@ class _MusicPageState extends State<MusicPage> {
                 image: AssetImage('assets/MusicPage.png'),
                 fit: BoxFit.cover,
               ),
-            ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: CustomAppBar(
-              showSettings: false,
-              showProfile: false,
-              showInfo: false,
-              infoCallback: null,
             ),
           ),
           Positioned(
@@ -165,10 +178,12 @@ class _MusicPageState extends State<MusicPage> {
                   setState(() {
                     if (isPlaying) {
                       print("pausing");
-                      player.pause();
+                      //player.pause();
+                      globalplayer.pause();
                     } else {
                       print("resuming");
-                      player.resume();
+                      //player.resume();
+                      globalplayer.resume();
                     }
 
                     isPlaying = !isPlaying;
@@ -208,6 +223,17 @@ class _MusicPageState extends State<MusicPage> {
               }
               return audioItems[index - 1];
             },
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: CustomAppBar(
+              showSettings: false,
+              showProfile: false,
+              showInfo: false,
+              infoCallback: null,
+            ),
           ),
         ],
       ),

@@ -101,7 +101,7 @@ class _PlacesPageState extends State<PlacesPage> {
               ),
             ),
             Positioned(
-              top: 200,
+              top: MediaQuery.of(context).size.height * 0.25,
               left: 0,
               child: PlacesList(
                 places: placesList,
