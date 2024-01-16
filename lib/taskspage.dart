@@ -5,6 +5,7 @@ import 'widgets/tasks_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'utils/device_id.dart';
 import 'widgets/overlay_function.dart';
+import 'widgets/custom_appbar.dart';
 
 class TasksPage extends StatefulWidget {
   const TasksPage({Key? key}) : super(key: key);
@@ -72,6 +73,15 @@ class _TasksPageState extends State<TasksPage> {
                   image: AssetImage('assets/TasksPage.png'),
                   fit: BoxFit.cover,
                 ),
+              ),
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: AppBar(
+                backgroundColor: Colors.transparent, // Set the background color to transparent
+                elevation: 0, 
               ),
             ),
             Positioned(

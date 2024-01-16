@@ -22,25 +22,25 @@ class _PlacesPageState extends State<PlacesPage> {
       name: 'starbucks',
       imageAsset: 'assets/places/Starbucks_place.png',
       isCompleted: false,
-      location: Tuple2(37, -122),
+      location: Tuple2(37.97575, 23.75225),//Tuple2(37, -122),
     ),
     Place(
       name: 'coffee island',
       imageAsset: 'assets/places/Coffee_island_place.png',
       isCompleted: false,
-      location: Tuple2(40.7128, -74.0060),
+      location: Tuple2(37.978030, 23.769156),
     ),
     Place(
       name: 'Mickel',
       imageAsset: 'assets/places/Mickel_place.png',
       isCompleted: false,
-      location: Tuple2(100, 234),
+      location: Tuple2(37.978421, 23.768129),
     ),
     Place(
       name: 'BooksBeans',
       imageAsset: 'assets/places/BooksBeans_place.png',
       isCompleted: false,
-      location: Tuple2(100, 234),
+      location: Tuple2(37.97167, 23.75047),
     ),
     // Add more Place instances as needed
   ];

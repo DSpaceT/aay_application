@@ -25,7 +25,7 @@ class _ScheduleAdderState extends State<ScheduleAdder> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Color.fromARGB(255, 237, 70, 196),
+      backgroundColor: Color.fromARGB(255, 125, 63, 195),
       content: Container(
         height: 350,
         child: Column(
