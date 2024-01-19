@@ -19,7 +19,10 @@ class InfoOverlay extends StatelessWidget {
   final Function() onClose;
   final String overlayImage;
 
-  InfoOverlay({required this.onClose, required this.overlayImage});
+  InfoOverlay({
+    required this.onClose,
+    required this.overlayImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -85,29 +88,35 @@ class DialogBox extends StatefulWidget {
 }
 
 class _DialogBoxState extends State<DialogBox> {
+  final _textKey = GlobalKey<FormState>();
+  final _textKey2 = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Color.fromARGB(255, 197, 27, 155),
+      backgroundColor: Color.fromARGB(255, 160, 13, 62),
       content: Container(
         height: MediaQuery.of(context).size.height * 0.5,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // get user input
-            TextField(
-              controller: widget.controller,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color.fromARGB(255, 224, 170, 8),
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                hintText: "Task Title",
+            Form(
+              key: _textKey,
+              child: TextField(
+                controller: widget.controller,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 224, 170, 8),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  hintText: "Task Title",
+                ),
               ),
             ),
 
-            Container(
-              height: 243,
+            Form(
+              key: _textKey2,
               child: TextField(
                 controller: widget.controller2,
                 maxLines: null, // Allow unlimited lines

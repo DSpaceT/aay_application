@@ -26,6 +26,7 @@ class _StudyPageState extends State<StudyPage> {
   bool study = globalstudy;
   bool resumed = globalresume;
   int selectedMinutes = 0;
+  bool shouldVibrate = false;
 
   int firstbox = 10;
   int secondbox = 30;
@@ -115,10 +116,13 @@ class _StudyPageState extends State<StudyPage> {
                   } else {
                     what = timerProviderBreak.seconds;
                   }
-                  if (what == 0) {
+                  if (what == 0 && shouldVibrate) {
                     resumed = false;
                     globalresume = false;
-                    Vibration.vibrate(duration: 500);
+                    Vibration.vibrate(duration: 1000);
+                    setState(() {
+                      shouldVibrate = false;
+                    });
                   }
                   if (what >= 600) {
                     return MediaQuery.of(context).size.width / 2 -
@@ -214,6 +218,7 @@ class _StudyPageState extends State<StudyPage> {
               child: ElevatedButton(
                   onPressed: () {
                     setState(() {
+                      shouldVibrate = true;
                       if (resumed) {
                         resumed = false;
                         globalresume = false;

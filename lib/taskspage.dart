@@ -55,7 +55,6 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
-
   Widget _buildContent() {
     return Scaffold(
       body: GestureDetector(
@@ -75,8 +74,8 @@ class _TasksPageState extends State<TasksPage> {
               ),
             ),
             Positioned(
-              top: MediaQuery.of(context).size.height * 0.12,
-              left: MediaQuery.of(context).size.width * 0.05,
+              top: 100,
+              left: 20,
               right: 20,
               bottom: 200,
               child: TasksList(
@@ -86,29 +85,30 @@ class _TasksPageState extends State<TasksPage> {
               ),
             ),
             Positioned(
-              top: MediaQuery.of(context).size.height * 0.73,
-              left: MediaQuery.of(context).size.width * 0.05,
-              right: 20,
-              bottom: 170,
-              child: ElevatedButton(
+                top: 560,
+                left: 50,
+                right: 50,
+                bottom: 170,
+                child: ElevatedButton(
                   onPressed: () {
                     // Open overlay when the "Add Task" button is pressed
-                   showOverlay_here();
+                    showOverlay_here();
                   },
                   child: const Text('Add Task'),
-                )
-            ),
+                )),
             Visibility(
               visible: isOverlayVisible,
               child: DialogBox(
                 controller: _controller,
                 controller2: _controller2,
                 onSave: () => {
-                  //hideOverlay_here(),
-                  isOverlayVisible = false,
-                  _addTask(_controller.text, _controller2.text),
-                  _controller.clear(),
-                  _controller2.clear(),
+                  setState(() {
+                    //hideOverlay_here(),
+                    isOverlayVisible = false;
+                    _addTask(_controller.text, _controller2.text);
+                    _controller.clear();
+                    _controller2.clear();
+                  })
                 },
                 onCancel: hideOverlay_here,
                 onClose: hideOverlay_here,
