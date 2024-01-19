@@ -97,10 +97,11 @@ class _PlacesListState extends State<PlacesList> {
                         }
                       }
                       if(resumed && counter ==1){
-                        if (cur_location.latitude.toInt() == widget.places[index_checked].location.item1 && 
-                          cur_location.longitude.toInt() == widget.places[index_checked].location.item2){
-                            // globalinitialvalues[index] = newValue ?? false;
-                            // widget.places[index].isCompleted = newValue ?? false;
+                        // if (cur_location.latitude.toInt() == widget.places[index_checked].location.item1 && 
+                        //   cur_location.longitude.toInt() == widget.places[index_checked].location.item2){
+                          
+                        if (double.parse(cur_location.latitude.toStringAsFixed(5)) == widget.places[index_checked].location.item1 && 
+                          double.parse(cur_location.longitude.toStringAsFixed(5))== widget.places[index_checked].location.item2){
                             checkboxColor = Colors.green;
                             points.resumeTimer();
                           }
