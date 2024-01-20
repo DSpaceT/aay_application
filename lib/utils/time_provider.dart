@@ -11,6 +11,7 @@ class TimerProvider with ChangeNotifier {
   int _seconds;
   bool _isPaused = false;
   late String userId;
+  bool vibrate = false;
 
   TimerProvider(this._seconds) {
     _timer = Timer.periodic(Duration(seconds: 1), _updateTimer);
@@ -26,9 +27,15 @@ class TimerProvider with ChangeNotifier {
   void _updateTimer(Timer timer) {
     if (!_isPaused && _seconds > 0) {
       _seconds--;
+      if(_seconds == 0){
+        vibrate = true;
+      }
       notifyListeners();
-    } else {
+    } else if(vibrate){
       Vibration.vibrate(duration: 1000);
+      vibrate = false;
+      _timer.cancel();
+    }else{
       _timer.cancel();
     }
   }
