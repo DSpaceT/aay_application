@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'utils/time_provider.dart';
 import 'utils/timer_provider_break.dart';
 
-import 'package:vibration/vibration.dart';
+
 
 bool globalstudy = true;
 bool globalresume = false;
@@ -26,7 +26,6 @@ class _StudyPageState extends State<StudyPage> {
   bool study = globalstudy;
   bool resumed = globalresume;
   int selectedMinutes = 0;
-  bool shouldVibrate = false;
 
   int firstbox = 10;
   int secondbox = 30;
@@ -116,12 +115,10 @@ class _StudyPageState extends State<StudyPage> {
                   } else {
                     what = timerProviderBreak.seconds;
                   }
-                  if (what == 0 && shouldVibrate) {
+                  if (what == 0) {
                     resumed = false;
                     globalresume = false;
-                    Vibration.vibrate(duration: 1000);
                     setState(() {
-                      shouldVibrate = false;
                     });
                   }
                   if (what >= 600) {
@@ -218,7 +215,6 @@ class _StudyPageState extends State<StudyPage> {
               child: ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      shouldVibrate = true;
                       if (resumed) {
                         resumed = false;
                         globalresume = false;

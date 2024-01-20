@@ -120,8 +120,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           padding: EdgeInsets.all(25),
                           margin: EdgeInsets.all(25),
-                          width: 250, // Set the width as needed
-                          height: 250, // Set the height as needed
+                          width: MediaQuery.of(context).size.width * 0.6, // Set the width as needed
+                          height: MediaQuery.of(context).size.height * 0.35, // Set the height as needed
                           child: Center(
                             child: Padding(
                               padding: const EdgeInsets.only(
@@ -149,8 +149,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           padding: EdgeInsets.all(25),
                           margin: EdgeInsets.all(25),
-                          width: 250, // Set the width as needed
-                          height: 250, // Set the height as needed
+                          width: MediaQuery.of(context).size.width * 0.6, // Set the width as needed
+                          height: MediaQuery.of(context).size.height * 0.35, // Set the height as needed
                           child: Center(
                             child: Padding(
                               padding: const EdgeInsets.only(
@@ -224,8 +224,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 return Row(
                                   children: [
                                     Container(
-                                      width: 300,
-                                      height: 70,
+                                      width: MediaQuery.of(context).size.width * 0.8,
+                                      height: MediaQuery.of(context).size.height * 0.1,
                                       padding: EdgeInsets.all(8.0),
                                       margin:
                                           EdgeInsets.symmetric(vertical: 20.0),

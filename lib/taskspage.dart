@@ -5,7 +5,7 @@ import 'widgets/tasks_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'utils/device_id.dart';
 import 'widgets/overlay_function.dart';
-import 'widgets/custom_appbar.dart';
+
 
 class TasksPage extends StatefulWidget {
   const TasksPage({Key? key}) : super(key: key);
@@ -106,7 +106,7 @@ class _TasksPageState extends State<TasksPage> {
               ),
             ),
             Positioned(
-                top: 560,
+                top: 530,
                 left: 50,
                 right: 50,
                 bottom: 170,
@@ -157,9 +157,7 @@ class _TasksPageState extends State<TasksPage> {
 
   void _addTask(String newtitle, String newdescription) async {
     await _addTaskToFirestore(newtitle, newdescription);
-    //tasks = await _getAllTasksFromFirestore();
-    // Reload tasks after adding a new task
-    //setState(() {});
+
   }
 
   Future<void> _addTaskToFirestore(

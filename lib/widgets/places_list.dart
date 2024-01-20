@@ -82,7 +82,9 @@ class _PlacesListState extends State<PlacesList> {
                   activeColor: checkboxColor,
                   onChanged: (bool? newValue) async {
                     // Handle checkbox value change
+                    try{
                     Position cur_location = await LocationHelper.getLocation();
+
                     setState(() {
                       globalinitialvalues[index] = newValue ?? false;
                       widget.places[index].isCompleted = newValue ?? false;
@@ -99,9 +101,12 @@ class _PlacesListState extends State<PlacesList> {
                       if(resumed && counter ==1){
                         // if (cur_location.latitude.toInt() == widget.places[index_checked].location.item1 && 
                         //   cur_location.longitude.toInt() == widget.places[index_checked].location.item2){
-                          
-                        if (double.parse(cur_location.latitude.toStringAsFixed(5)) == widget.places[index_checked].location.item1 && 
-                          double.parse(cur_location.longitude.toStringAsFixed(5))== widget.places[index_checked].location.item2){
+                          print("place lattitude location ${(widget.places[index_checked].location.item1).toStringAsFixed(3)}");
+                          print("place longitude location ${(widget.places[index_checked].location.item2).toStringAsFixed(3)}");
+                          print("mine lattitude location ${(cur_location.latitude).toStringAsFixed(3)}");
+                          print("mine longitude location ${(cur_location.longitude.toStringAsFixed(3))}");
+                        if ((cur_location.latitude).toStringAsFixed(3) == (widget.places[index_checked].location.item1).toStringAsFixed(3) && 
+                          (cur_location.longitude).toStringAsFixed(3)== (widget.places[index_checked].location.item2).toStringAsFixed(3)){
                             checkboxColor = Colors.green;
                             points.resumeTimer();
                           }
@@ -111,12 +116,23 @@ class _PlacesListState extends State<PlacesList> {
                       }
                       // Update the isCompleted property when the checkbox is pressed
                     });
+                  }catch(e){
+                    showGpsEnableSnackBar(context);
+                  }
                   },
                 ),
               ],
             ),
           ),
       ],
+    );
+  }
+  void showGpsEnableSnackBar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Please enable GPS for accurate location tracking'),
+        duration: Duration(seconds: 3),
+      ),
     );
   }
 }

@@ -1,5 +1,7 @@
 
 import 'package:geolocator/geolocator.dart';
+
+
 class LocationHelper {
   // Function to get the current location
   static Future<Position> getLocation() async {
@@ -10,7 +12,10 @@ class LocationHelper {
       return position;
     } catch (e) {
       print('Error getting location: $e');
-      throw e;
+      await Geolocator.checkPermission();
+      await Geolocator.requestPermission();
+      return Future.error('Location permissions are denied');
+      //throw e;
       // Handle errors or show a message to the user.
     }
   }
@@ -39,11 +44,7 @@ class LocationHelper {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale 
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
+        print('Location permissions are denied');
         return Future.error('Location permissions are denied');
       }
     }
@@ -58,6 +59,7 @@ class LocationHelper {
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
   }
+
 }
 
 

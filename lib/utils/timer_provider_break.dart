@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-
+import 'package:vibration/vibration.dart';
 
 // utils/time_provider.dart
 
@@ -19,6 +19,7 @@ class TimerProviderBreak with ChangeNotifier {
       _seconds--;
       notifyListeners();
     } else {
+      Vibration.vibrate(duration: 1000);
       _timer.cancel();
     }
   }

@@ -119,7 +119,7 @@ class _DialogBoxState extends State<DialogBox> {
               key: _textKey2,
               child: TextField(
                 controller: widget.controller2,
-                maxLines: null, // Allow unlimited lines
+                maxLines: 10, // Allow unlimited lines
                 keyboardType: TextInputType.multiline, // Enable multiline input
                 decoration: InputDecoration(
                   filled: true,

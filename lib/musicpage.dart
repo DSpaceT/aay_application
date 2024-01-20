@@ -67,13 +67,10 @@ class _MusicPageState extends State<MusicPage> {
       if (state == PlayerState.completed) {
         // Song has completed, restart it
         globalplayer.stop();
-        setState(() {
-          isPlaying = false;
-          globalisPlaying = false;
-          started = false;
-          globalstarted = false;
-        });
-        globalplayer.seek(Duration.zero);
+        isPlaying = false;
+        globalisPlaying = false;
+        started = false;
+        globalstarted = false;
       }
     });
   }
